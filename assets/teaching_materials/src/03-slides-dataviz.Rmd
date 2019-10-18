@@ -1,0 +1,941 @@
+---
+title: "Data Viz with ggplot2"
+author: "Claire Black"
+institute: "The DataSciBC"
+date: "2016/09/16 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(fig.dim=c(4.8, 4.5), fig.retina=2, out.width="100%", warning = FALSE, message = FALSE)
+knitr::opts_hooks$set(fig.callout = function(options) {
+  if (options$fig.callout) {
+    options$echo <- FALSE
+    options$out.height <- "99%"
+    options$fig.width <- 16
+    options$fig.height <- 8
+  }
+  options
+})
+```
+
+```{css, echo = FALSE}
+/* custom.css */
+.my_borders {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 20px;
+  line-height: 2;
+}
+.my_line_height{ 
+  line-height: 0.75; 
+}
+.left-code {
+  color: #777;
+  width: 49%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 49%;
+  float: right;
+  padding-left: 1%;
+}
+```
+
+# Learning Objectives
+
+## By the end of this session, you should be able to use the **ggplot2** package to build:
+
+- scatter plots
+- histograms and density plots
+- box plots
+- facetted charts
+- maps
+
+---
+
+# ggplot2 package
+
+## The ggplot2 package implements a "layered grammar of graphics" where data visualization is divided into parameters: 
+
+- the data you want to visualise, e.g. height and weight
+- aesthetics to represent variables, e.g. map height to the y-axis, map weight to the x-axis
+- geometric objects, e.g. display with a point
+- a coordinate system, e.g. use a standard cartesian axis
+- the ability to statistical transform variables
+
+---
+
+# Mapping Aesthetics
+ 
+- This is how the data are "mapped" to a visual dimension
+- We are most familiar with `x` and `y` mappings
+- Others might include:
+    - Size
+    - Shape
+    - Colour/Fill
+
+---
+
+# Load ***tidyverse***  which includes ***ggplot*** 
+
+```{r}
+library(tidyverse)
+```
+
+---
+
+# Import the course data
+
+### We are going to use the long_df.csv and demo_df.csv files used in the previous session to learn how to create the layers of a ggplot
+
+---
+
+## Data files
+
+```{r, include = FALSE}
+long_df <- read_csv(
+  "~/_data/esicm/longitudinal-data.csv",
+  col_types = "?dddddddddddddddddcdddcdddddd")
+demo_df <- read_csv("~/_data/esicm/demographic-data.csv")
+```
+
+```{r, eval = FALSE}
+long_df <- read_csv("./data/longitudinal-data.csv")
+demo_df <- read_csv("./data/demographic-data.csv")
+```
+
+---
+
+class: inverse, center, middle
+
+# Scatter Plots
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot1, fig.show="hide"}
+ggplot(data = demo_df)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot1", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot2, fig.show="hide"}
+ggplot(data = demo_df) + 
+  aes(x = weight) +
+  aes(y = height)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot2", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot3, fig.show="hide"}
+ggplot(data = demo_df) + 
+  aes(x = weight) +
+  aes(y = height) +
+  geom_point()
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot3", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot4, fig.show="hide"}
+ggplot(data = demo_df) + 
+  aes(x = weight) +
+  aes(y = height) +
+  geom_point() +
+  geom_jitter()
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot4", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot5, fig.show="hide"}
+ggplot(data = demo_df) + 
+  aes(x = weight) +
+  aes(y = height) +
+  geom_point() +
+  geom_jitter() +
+  aes(col = sex)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot5", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot6, fig.show="hide"}
+ggplot(data = demo_df) + 
+  aes(x = weight) +
+  aes(y = height) +
+  geom_point() +
+  geom_jitter() +
+  aes(col = sex) +
+  geom_smooth(method = "lm", se = F)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot6", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot7, fig.show="hide"}
+ggplot(data = demo_df) + 
+  aes(x = weight) +
+  aes(y = height) +
+  geom_point() +
+  geom_jitter() +
+  aes(col = sex) +
+  geom_smooth(method = "lm", se = F) +
+  ggtitle("Height and Weight by Sex") +
+  xlab("Weight (Kg)") +
+  ylab("Height (cm)") 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot7", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot8, fig.show="hide"}
+ggplot(data = demo_df) + 
+  aes(x = weight) +
+  aes(y = height) +
+  geom_point() +
+  geom_jitter() +
+  aes(col = sex) +
+  geom_smooth(method = "lm", se = F) +
+  ggtitle("Height and Weight by Sex") +
+  xlab("Weight (Kg)") +
+  ylab("Height (cm)") +
+  scale_colour_viridis_d(end=0.8,alpha = 0.5)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot8", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dot9, fig.show="hide"}
+ggplot(data = demo_df) + 
+  aes(x = weight) +
+  aes(y = height) +
+  geom_point() +
+  geom_jitter() +
+  aes(col = sex) +
+  geom_smooth(method = "lm", se = F) +
+  ggtitle("Height and Weight by Sex") +
+  xlab("Weight (Kg)") +
+  ylab("Height (cm)") +
+  scale_colour_viridis_d( end=0.8, alpha = 0.5) + 
+  theme_minimal() +
+  theme(legend.title = element_blank()) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dot9", "png")`)
+]
+
+---
+
+class: inverse, center, middle
+
+# Histograms
+
+---
+
+class: my_borders
+
+.left-code[
+```{r hist1, fig.show="hide"}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("hist1", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r hist2, fig.show="hide",warning=FALSE}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) +
+  geom_histogram () 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("hist2", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r hist3, fig.show="hide", warning=FALSE}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) +
+  geom_histogram (binwidth = 1, fill ="grey", 
+                  col = "black") 
+  
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("hist3", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r hist4, fig.show="hide"}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) +
+  geom_histogram (binwidth = 1, fill ="grey", 
+                  col = "black") +
+  ggtitle("Arterial PaO2") +
+  xlab("PaO2")
+  
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("hist4", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r hist5, fig.show="hide"}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) +
+  geom_histogram (binwidth = 1, fill ="grey",
+                  col = "black") +
+  ggtitle("Arterial PaO2") +
+  xlab("PaO2") +
+  theme_minimal() 
+  
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("hist5", "png")`)
+]
+
+---
+
+class: inverse, center, middle
+
+# Density Plots
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dp1, fig.show="hide"}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dp1", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dp2, fig.show="hide",warning=FALSE}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) +
+  geom_density () 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dp2", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dp3, fig.show="hide", warning=FALSE}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) +
+  geom_density (fill ="grey", 
+                  col = "black") 
+  
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dp3", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dp4, fig.show="hide"}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) +
+  geom_density(binwidth = 1, fill ="grey", 
+                  col = "black") +
+  ggtitle("Arterial PaO2") +
+  xlab("PaO2")
+  
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dp4", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r dp5, fig.show="hide"}
+ggplot(data = long_df) +
+  aes(x = pao2_abg) +
+  geom_density (fill ="grey",
+                  col = "black") +
+  ggtitle("Arterial PaO2") +
+  xlab("PaO2") +
+  theme_minimal() 
+  
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("dp5", "png")`)
+]
+
+---
+
+class: inverse, center, middle
+
+# Box and Whisker Plots
+
+---
+
+## Chemotheray and Neutrophil Count
+
+This time need to join demographic and longitudinal dataframes together
+
+```{r}
+long_demo <- left_join(demo_df, long_df, by = "episode_id")
+```
+
+---
+
+class: my_line_height
+
+## long-demo
+
+```{r}
+names(long_demo)
+```
+
+---
+
+## Data format
+
+```{r}
+str(long_demo$chemo)
+str(long_demo$neutrophil)
+```
+
+Box plots need categorical data.
+Change data format from numeric to categorical.
+
+```{r}
+long_demo <- long_demo %>% 
+  mutate(chemo = as.factor(chemo))
+```
+
+```{r}
+str(long_demo$chemo)
+```
+
+---
+
+class: my_borders
+
+.left-code[
+```{r box1, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(x = chemo) +
+  aes(y = neutrophil) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("box1", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r box3, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(x = chemo) +
+  aes(y = neutrophil) +
+  aes(colour = chemo) +
+  geom_boxplot() 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("box3", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r box4, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(x = chemo) +
+  aes(y = neutrophil) +
+  aes(colour = chemo) +
+  geom_boxplot() +
+  xlab("Chemotherapy")+
+  ylab("Neutrophil") +
+  ggtitle("Chemotherapy and Neutrophil Count") 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("box4", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r box5, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(x = chemo) +
+  aes(y = neutrophil) +
+  aes(colour = chemo) +
+  geom_boxplot() +
+  xlab("Chemotherapy")+
+  ylab("Neutrophil") +
+  ggtitle("Chemotherapy and Neutrophil Count") +
+  theme_light() +
+  theme(legend.position = "none")
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("box5", "png")`)
+]
+
+---
+
+class: inverse, center, middle
+
+# Facetted Plots
+
+---
+
+class: my_borders
+
+.left-code[
+```{r f1, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(y = fluid_balance) +
+  aes(x = pao2_abg)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("f1", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r f2, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(y = fluid_balance) +
+  aes(x = pao2_abg) +
+  geom_point(alpha = 0.5)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("f2", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r f3, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(y = fluid_balance) +
+  aes(x = pao2_abg) +
+  geom_point(alpha = 0.5) +
+  aes(colour = as.factor(steroids)) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("f3", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r f4, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(y = fluid_balance) +
+  aes(x = pao2_abg) +
+  geom_point(alpha = 0.5) +
+  aes(colour = as.factor(steroids)) +
+  facet_wrap(~as.factor(steroids)) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("f4", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r f5, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(y = fluid_balance) +
+  aes(x = pao2_abg) +
+  geom_point(alpha = 0.5) +
+  aes(colour = as.factor(steroids)) +
+  facet_wrap(~as.factor(steroids)) +
+  xlab("PaO2")+
+  ylab("Daily Fluid balance (ml)") +
+  ggtitle("PaO2, Steroids and Fluid Balance")
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("f5", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r f6, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(y = fluid_balance) +
+  aes(x = pao2_abg) +
+  geom_point(alpha = 0.5) +
+  aes(colour = as.factor(steroids)) +
+  facet_wrap(~as.factor(steroids)) +
+  xlab("PaO2")+
+  ylab("Daily Fluid balance (ml)") +
+  ggtitle("PaO2, Steroids and Fluid Balance") +
+  ylim(-5025,5025)+
+  xlim(0,70)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("f6", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r f7, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(y = fluid_balance) +
+  aes(x = pao2_abg) +
+  geom_point(alpha = 0.5) +
+  aes(colour = as.factor(steroids)) +
+  facet_wrap(~as.factor(steroids)) +
+  xlab("PaO2")+
+  ylab("Daily Fluid balance (ml)") +
+  ggtitle("PaO2, Steroids and Fluid Balance") +
+  ylim(-5025,5025)+
+  xlim(0,70) +
+  theme_light() +
+  theme(legend.position = "none")
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("f7", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r f8, fig.show="hide"}
+ggplot(data = long_demo) +
+  aes(y = fluid_balance) +
+  aes(x = pao2_abg) +
+  geom_point(alpha = 0.5) +
+  aes(colour = as.factor(steroids)) +
+  facet_wrap(~as.factor(steroids)) +
+  xlab("PaO2")+
+  ylab("Daily Fluid balance (ml)") +
+  ggtitle("PaO2, Steroids and Fluid Balance") +
+  ylim(-5025,5025)+
+  xlim(0,70) +
+  theme_light() +
+  theme(legend.position = "none")
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("f8", "png")`)
+]
+
+---
+
+class: inverse, center, middle
+
+# Chlorepleth
+
+---
+
+# Chlorepleth
+
+```{r,  include = FALSE}
+postcodes <- read_csv(file = "../ggpostcodes.csv")
+```
+
+## We are going to use a synthetic dataset as we don't share CCHIC postcodes
+
+```{r, eval = FALSE}
+postcodes <- read_csv(file = "./ggpostcodes.csv")
+```
+
+## Additionally going to use 
+
+```{r}
+library(maps)
+library(RColorBrewer)
+UK <- map_data(map = "world", region = "UK")
+```
+
+Slightly easier to use colour map
+
+---
+
+class: my_borders
+
+.left-code[
+```{r pc1, fig.show="hide"}
+ggplot(data = UK) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("pc1", "png")`)
+]
+
+---
+
+class: my_borders
+.left-code[
+```{r pc2, fig.show="hide"}
+ggplot(data = UK) +
+ aes(x = long, y = lat, group = group)
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("pc2", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r pc3, fig.show="hide"}
+ggplot(data = UK) +
+ aes(x = long, y = lat, group = group) + 
+  geom_polygon(fill = "#004529", alpha = 0.75) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("pc3", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r pc4, fig.show="hide"}
+ggplot(data = UK) +
+ aes(x = long, y = lat, group = group) + 
+  geom_polygon(fill = "#004529", alpha = 0.75) +
+  geom_point(data = postcodes, 
+             aes(y =  latitude, x = longitude, group = group),
+             colour = "#f7fcb9", size = 0.5) 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("pc4", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r pc5, fig.show="hide"}
+ggplot(data = UK) +
+ aes(x = long, y = lat, group = group) + 
+  geom_polygon(fill = "#004529", alpha = 0.75) +
+  geom_point(data = postcodes, 
+             aes(y = latitude, x = longitude, 
+                 group = group),
+             colour = "#f7fcb9", size = 0.5) +
+  coord_map() 
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("pc5", "png")`)
+]
+
+---
+
+class: my_borders
+
+.left-code[
+```{r pc6, fig.show="hide"}
+ggplot() +
+  geom_polygon(
+    data = UK,
+    mapping = aes(
+      x = long, y = lat, group = group),
+      fill = "#004529", alpha = 0.75) +
+  geom_point(
+    data = postcodes, 
+    mapping = aes(
+      y =  latitude, x = longitude,
+      group = group),
+    colour = "#f7fcb9", size = 0.5) +
+  coord_map() +
+  theme_minimal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank())
+```
+]
+
+.right-plot[
+![](`r knitr::fig_chunk("pc6", "png")`)
+]
+
+---
+
+class: inverse, center, middle
+
+# Now your turn
+
+---

@@ -1,0 +1,336 @@
+---
+title: "Data Wrangling"
+author: "Edward Palmer"
+institute: "The DataSciBC"
+date: "2019/09/17 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+class: inverse, center, middle
+
+# Lesson #2: Data Wrangling
+
+---
+
+# Learning Objectives
+
+By the end of this session, you should be able to:
+- Use the **tidyverse** packages to build your first data pipeline.
+- Import the data to R
+- Manipulate and clean the data
+
+---
+
+background-image: url(../img/tidyverse.png)
+
+---
+
+# The Tidyverse
+
+> The tidyverse is a set of packages that work in harmony because they share common data representations... The tidyverse package is designed to make it easy to install and load core packages from the tidyverse in a single command.
+
+---
+
+# The Tidyverse
+
+Running `library(tidyverse)` will load the following packages:
+- `readr`, for data import.
+- `dplyr`, for data manipulation.
+- `tidyr`, for data tidying.
+- `ggplot2`, for data visualisation.
+- `purrr`, for functional programming.
+- `tibble`, for tibbles, a modern re-imagining of data frames.
+- `stringr`, for strings.
+- `forcats`, for factors.
+
+We are going to give an overview of the first four packages. The others you will encounter as you develop your skills.
+
+---
+
+# The Missing Package
+
+There is no package in the tidyverse for dealing with dates and times. This is the `lubridate` package.
+
+For various reasons, `lubridate` is not included in `tidyverse`, but it is written by the same developers and follows the same principles.
+
+---
+
+class: inverse, center, middle
+
+# Load the tidyverse
+
+---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+---
+
+# Import the Course Data
+
+For the purposes of ESICM, we have already included data in your RStudio instance. To import this into R, we simply need to run a function and that read the csv files: `read_csv()`
+
+```{r, include = FALSE}
+long_df <- read_csv("~/_data/esicm/longitudinal-data.csv", col_types = "?dddddddddddddddddcdddcdddddd")
+demo_df <- read_csv("~/_data/esicm/demographic-data.csv")
+```
+
+
+```{r, eval = FALSE}
+long_df <- read_csv("./data/longitudinal-data.csv")
+demo_df <- read_csv("./data/demographic-data.csv")
+```
+
+---
+
+# Inspect the Data
+
+- Most hard work already done.
+- Tables are nearly in a "tidy" format.
+- Tidy data means:
+  - Each column is a variable.
+  - Each row is an observation.
+
+---
+
+```{r}
+long_df
+```
+
+---
+
+```{r}
+demo_df
+```
+
+---
+
+Another very powerful way to view the data is to use the `glimpse` function
+
+---
+
+```{r}
+glimpse(long_df)
+```
+
+---
+
+```{r}
+glimpse(demo_df)
+```
+
+---
+
+# Data Wrangling: dplyr
+
+A useful _grammar_ for data manipulation.
+
+First, let's _filter_ the demographic data by row
+
+```{r}
+filter(demo_df, height >= 180)
+```
+
+---
+
+This _filters_ rows from the `demo_df` data frame where `height` is greater than or equal to `180`cm.
+
+---
+
+# Notes on comparisons
+
+- `==`
+- `!=`
+- `>=`
+- `>`
+- `<=`
+- `<`
+- `%in%`
+
+---
+
+Filter **always** acts on rows.
+Will throw away any data that doesn't meet your request.
+
+---
+
+A similar function called `select` acts over columns. Just want the `sex` colum?
+
+```{r}
+select(demo_df, sex)
+```
+
+---
+
+class: inverse, center, middle
+
+# The Pipe
+
+---
+
+background-image: url(../img/pipe.jpeg)
+
+---
+
+# The Pipe
+
+Now here comes the _proper_ magic. What if you want to both filter and select?
+
+```{r}
+demo_df %>%
+  filter(height >= 180) %>%
+  select(sex)
+```
+
+---
+
+The `%>%` operator is called a **pipe**
+It _pipes_ data from one function to the next
+
+```
+data %>%
+  do_this() %>%
+  then_this() %>%
+  and_this()
+```
+
+---
+
+If we want to save the output of the pipe
+Use the assignment operator at the start
+
+```
+data <- data %>%
+  do_this() %>%
+  then_this() %>%
+  and_this()
+```
+
+remember that order matters.
+The benefit of writing code like this:
+- start with data
+- each line is a single function that performs an action.
+- This is the start of a data pipeline.
+
+---
+
+```{r}
+# Summarise
+demo_df %>%
+  filter(height >= 180) %>%
+  select(sex) %>%
+  table()
+```
+
+---
+
+# Verbs to rememebr
+
+1. `arrange` - orders data using a named column
+1. `group_by`- sets a column to be a grouping variable
+1. `summarise`- summarises data over a grouping variable
+1. `mutate` - add a new column to the data
+
+Armed with only these 6 functions, you can accomplish a huge amount that would be tiresome and frustrating in excel.
+
+---
+
+```{r}
+demo_df %>%
+  select(height, weight, sex) %>%
+  arrange(height)
+```
+
+---
+
+```{r}
+demo_df %>%
+  group_by(sex) %>%
+  summarise(average_height = mean(height, na.rm = TRUE))
+```
+
+---
+
+```{r}
+demo_df %>%
+  mutate(bmi = weight / (height/100)^2) %>%
+  select(weight, height, bmi) %>%
+  arrange(desc(bmi))
+```
+
+---
+
+## Data Cleaning
+
+```{r}
+names(demo_df)
+```
+
+---
+
+It looks like the `discharge` variable is a little ambiguously named. Let's change that so it is clear.
+
+```{r}
+demo_df <- demo_df %>%
+  rename(discharge_dttm = discharge)
+```
+
+---
+
+# Wrangling strings
+
+```{r}
+demo_df <- demo_df %>%
+  separate(
+    col = primary_adm,
+    into = c("pt_type", "organ_system"),
+    sep = "\\.",
+    remove = FALSE
+    )
+```
+
+---
+
+```{r}
+demo_df <- demo_df %>%
+  mutate(pt_type = extract_numeric(pt_type)) %>%
+  mutate(organ_system = extract_numeric(organ_system))
+
+demo_df %>%
+  select(primary_adm, pt_type, organ_system)
+```
+
+---
+
+# Parsing dates
+
+```{r}
+demo_df %>%
+  select(dob, discharge_dttm) %>%
+  glimpse()
+```
+
+---
+
+```{r}
+library(lubridate)
+all_admissions <- ymd_hms("2000-01-01 00:00:00")
+
+demo_df <- demo_df %>%
+  mutate(age = interval(dob, all_admissions) / years(1)) %>%
+  mutate(los = interval(all_admissions, discharge_dttm) / days(1))
+
+demo_df %>%
+  select(age, los)
+```

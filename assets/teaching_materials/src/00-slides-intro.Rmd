@@ -1,0 +1,122 @@
+---
+title: "Introduction"
+author: "Steve Harris"
+institute: "The DataSciBC"
+date: "2019/09/17 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+long_df <- read_csv(
+  "~/_data/esicm/longitudinal-data.csv",
+  col_types = "?dddddddddddddddddcdddcdddddd")
+demo_df <- read_csv("~/_data/esicm/demographic-data.csv")
+```
+
+class: inverse, center, middle
+
+# Welcome
+
+---
+
+# Global Learning Objectives
+
+- What does everyone want to get out of the day?
+- Introduce a new way of handling data:
+  - Understand the importance of reproducibility
+  - Encourge the use of written code, rather than point and click
+- Leave with enough knowledge to push further independently
+
+---
+
+# Session Priorities
+
+- Ensure everyone can access the RStudio server
+- Introduce the course data
+- Briefly introduce files and directories
+
+---
+
+# Preliminaries
+
+1. Get connected to the wifi
+1. [Install Slack](https://slack.com/intl/en-gb/) or use the web interface
+  - You will have an invite to the course channel
+  - Introduce youselves on Slack
+1. Check you can login to R-Studio Server
+1. Pair programming: buddy up
+1. Live coding: we will code along with you
+
+**Green stickies** up when done. **Red stickies** up if stuck!
+
+---
+
+# Introducing the Course Data
+
+- Critical Care Health Informatics Collaborative (CC-HIC)
+- Aggregated EHR data
+- 263 variables
+  - 1d: Demographics, risk, outcomes
+  - 2d: Treatment and physiology
+- Anonymised sample of 1000 patients
+
+---
+
+# The Tables
+
+- demographic_data.csv
+  - information that **doesn't** change about the patient
+  - "1d data"
+  - demographics like sex, age, weight, height etc.
+  - *1 row per patient*, and *1 column per variable*.
+  
+```{r}
+demo_df
+```
+
+---
+
+# The Tables
+
+- longitudinal_data.csv
+  - information that **does** change about the patient
+  - "2d data"
+  - C-reactive protein, ionotrope administration, ventilation settings etc.
+  - *1 row per hour per patient*, and *1 column per variable*
+  
+```{r}
+long_df
+```
+
+---
+
+# Things to Highlight
+
+- Not every cell will be filled with data.
+- E.g. CRP (once daily measure)
+- many cells with `NA` (the way `R` represents missing information)
+
+For a full description of the data that exists inside CC-HIC see [here](../resources/static/data_spec.png)
+
+---
+
+# Your Data
+
+- We encourage you to bring along your own data.
+- Try out some of the exercises on your own data.
+- Feel free to approach us during ESICM for advice on your data.
+
+---
+
+# Files and directories
+
+- Live code in R Studio
+- Showcase `file.choose()`

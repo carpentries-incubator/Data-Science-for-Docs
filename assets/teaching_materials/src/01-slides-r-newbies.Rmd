@@ -1,0 +1,529 @@
+---
+title: "Lesson 1: R for Newbies"
+author: "Steve Harris"
+institute: "The DataSciBC"
+date: "2019/09/17 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+class: inverse, center, middle
+
+# Lesson #1: R for Newbies
+
+---
+
+# Learning Objectives
+
+- What is R
+- Why R
+- Find your way around RStudio
+- R building blocks
+- Packages
+- Using Help Pages
+
+---
+
+# What is R?
+
+- `R` is a *free* software environment for statistical computing and graphics.
+- Works with a wide variety of platforms (Windows and MacOS)
+- Particularly well suited to data analysis
+
+---
+
+# Why R?
+
+Three good reasons:
+
+1. You can do **anything** in `R`.
+2. **Science should be reproducible**.
+3. **A vast support network**.
+
+![](../img/AGBell_Notebook.jpg)
+
+---
+
+# Why Not R?
+
+- Perception that it is harder than using a GUI?
+- We aim to challenge this.
+
+---
+
+# Goals
+
+- Show you is how to build a **data pipeline**.
+  - data in a spreadsheet.
+  - processing instructions (a script) using `R`.
+  - an output: tables, plots, manuscripts, presentation etc.
+
+
+![](../img/Pipeline.png)
+
+---
+
+# R commandline
+
+![](../img/rcommandline.png)
+
+---
+
+# RStudio - Making R a Breeze
+
+- RStudio is an application that sits ontop of `R`.
+- integrated development environment (IDE).
+- Convenience of having a GUI, but with full access to the power of `R`. It includes, to name a few:
+  - a console (runs `R`)
+  - a syntax-highlighting editor
+  - tools for working with plots
+  - a history of your actions
+  - workspace management
+  - debugging tools
+
+---
+
+![](../img/rstudio.jpg)
+
+---
+
+![](../img/RStudioHighlightWindows.png)
+
+---
+
+![](../img/RStudioButtonsHighlighted.png)
+
+---
+# Exercise
+
+> Find the files tab and navigate to your project. If not already present, set up your project folder structure (I use folders for each of plots, data, reports and code). Navigate to your 'code' folder and then click on the 'more' button and select 'Set as working directory'.
+
+**CAUTION**. The "files" tab IS your computer. If you delete anything here, it will delete it on your computer.
+
+![](../img/rstudio-files.png)
+
+---
+
+# Files and diretories recap
+
+- The "path" is a file's 'postal address' from general to specific:
+    - Germany/Berlin/CityCube
+- The "root" directory is the start of this address.
+  - On Windows:  the `C:\` drive (note the *back slash*)
+  - On Mac and Linux:  just `/` (a *forward slash*)
+- You can write paths in two ways:
+  - The *absolute* path. A full address, starting at the root, and describing how to get from root, to the file of interest.
+    -  `/Users/edward/documents/my_script.R`
+  - The *relative* path. A partial address, starting at your "current location" and descibing how to get from the current location, to the file of interest.
+    - Assuming I am already at `/Users/edward/`
+      - `documents/my_script.R`
+    - If I need to go up a level, for example to find a file in Steve's user folder, I can use `..` the "two dots". This just means "go up one folder".
+      - `../steve/documents/steves_script.R`
+- You can always find your current location by typing `pwd` in the console (which means "print working directory") or by typing `getwd()` in `R`.
+
+---
+
+# Console (bottom left)
+
+The console _is_ `R`! Type anything here, and it will be interpreted by R. Try typing `2+2`.
+
+```{r}
+2+2
+```
+
+1. The command prompt `>`
+2. `2+2`
+3. We'll come back to the `[1]`
+4. `R` prints the answer `4`
+
+> **TIP:** Use the up and down arrow keys to go backwards and forwards in your 'command' history to quickly fix typos.
+
+---
+
+# Source (top left)
+
+- save your code for reproducibility
+- `command-enter` to send code to the console.
+
+```{r}
+2-2
+```
+
+- Save the file you have written as `labbook_YYMMDD.R`
+
+---
+
+# R building blocks
+
+- names
+- data
+- functions
+
+---
+
+class: inverse, center, middle
+
+# Names
+
+---
+
+# Names
+
+- everything has a name
+  - data
+  - numbers
+  - functions
+- `<-` to assign a name.
+
+> **TIP:** Use _option_ and the `-` (minus) key as a short cut to type this in RStudio.
+
+---
+
+Let `answer` equal `42`.
+Let `message` equal `Hello World!`
+
+```{r}
+answer <- 42
+message <- "Hello World!"
+```
+
+Once assigned to that name, we can call it back again and again.
+
+```{r}
+answer
+message
+```
+
+---
+
+class: inverse, center, middle
+
+# Data
+
+---
+
+# Vectors
+
+A vector is a list of things of the same type.
+
+---
+
+A list of numbers (a numeric vector):
+
+```{r}
+# using `c(...)` allows us to "combine" the elements within the parenthesis
+nums <- c(1, 4, 9, 16, 25)
+nums
+```
+
+---
+
+A list of characters (a character vector):
+
+```{r}
+chr <- c("Q", "W", "E", "R", "T", "Y")
+chr
+```
+
+---
+
+A `TRUE` or `FALSE` list  (a logical or boolian vector):
+
+```{r}
+bools <- c(TRUE, FALSE, TRUE, TRUE, FALSE)
+bools
+```
+
+---
+
+- _index_ the list by counting from left to right starting with `1`.
+- if you want the 3rd element, simply type `x[3]`.
+
+```{r}
+nums[3]
+chr[3]
+bools[3]
+```
+
+Because R _always_ 'thinks' in vectors, even the answer is a vector hence the leading `[1]`. It is a vector of length 1.
+
+---
+
+> **TRY THIS:** Try typing `1:100`. This is a shorthand way of writing all the numbers between 1 and 100. Look below, and see that the number in square brackes is just R keeping count of the numbers it shows you.
+
+```{r}
+1:100
+```
+
+> **EXTRA CREDIT** Try and guess what `bar` will look like before you print it? Why is this helpful?
+
+```{r}
+foo <- 1:100
+bar <- foo + 42
+print(bar)
+```
+
+
+---
+
+# Data frames
+
+- Data frames are many vectors combined in a grid.
+- analogous to storing data in a spread sheet.
+- I have age, sex, and weight data in 3 vectors:
+
+```{r}
+age <- c(5, 7, 41, 41)
+sex <- c("M", "M", "F", "M")
+weight <- c(16, 30, 55, 78)
+```
+
+---
+
+Then I can combine them into a _data frame_.
+
+```{r}
+class_demographics <- data.frame(age, sex, weight)
+```
+
+Have a look at `class_demographics`.
+
+```{r}
+class_demographics
+```
+
+---
+
+What's nice is that the `data.frame` _numbers_ the rows, and _names_ the columns.
+
+Moreover, rather than having to use numerical addresses to look at data, you can use the `$` operator to access the columns by name.
+
+---
+
+> **EXERCISE**
+> 1. Try typing `class_demographics$age`. What is the output?
+> 2. What happens if you try to add a value `TRUE` to a vector containing just integers like `c(1, 4, 7, 9)`?
+> 3. Now what happens if you add a string to your vector? Why is this happening?
+
+---
+
+class: inverse, center, middle
+
+# Functions
+
+---
+
+# Functions
+
+- Task specific machines that take an input, and give you an output.
+- `Sys.time()`: is a function built into `R` that tells us the time.
+
+```{r}
+Sys.time()
+```
+
+---
+
+We've already seen quite a few functions:
+- `c()`: takes several inputs and combines them into a single vector
+- `getwd()`: takes no inputs and returns the current working directory
+Try some yourself by typing it into the console.
+
+```{r, include = FALSE}
+start_new_game <- function() {
+  game_board <- matrix("[ ]", nrow = 10, ncol = 10)
+  game_board[1, 1] <- "[x]"
+  attr(game_board, "current_location") <- c(1, 1)
+  return(game_board)
+}
+
+move_down <- function(board, n = 1) {
+  cl <- attr(board, "current_location")
+  vertical <- cl[1]
+  if ((vertical + n) > 10 || (vertical + n) < 1) {
+    rlang::abort("Whoa! I can't move that far!")
+  }
+  
+  board[cl[1], cl[2]] <- "[ ]"
+  cl[1] <- cl[1] + n
+  board[cl[1], cl[2]] <- "[x]"
+  
+  attr(board, "current_location") <- cl
+  return(board)
+}
+
+move_up <- function(board, n = 1) {
+  move_down(board, -n)
+}
+
+move_right <- function(board, n = 1) {
+  cl <- attr(board, "current_location")
+  horizontal <- cl[2]
+  if ((horizontal + n) > 10 || (horizontal + n) < 1) {
+    rlang::abort("Whoa! I can't move that far!")
+  }
+  
+  board[cl[1], cl[2]] <- "[ ]"
+  cl[2] <- cl[2] + n
+  board[cl[1], cl[2]] <- "[x]"
+  
+  attr(board, "current_location") <- cl
+  return(board)
+}
+
+move_left <- function(board, n = 1) {
+  move_right(board, -n)
+}
+```
+
+---
+
+Let's try a more visual example. We've written a custom function that helps navigate our character (a little `x`) across a game board. Try it yourself.
+
+```{r}
+my_board <- start_new_game()
+```
+
+---
+
+Now we want to get our little x into the 7, 7 coordinate.
+
+```{r}
+# Move right by 6 (as we already start on 1)
+my_board <- move_right(my_board)
+my_board <- move_right(my_board)
+my_board <- move_right(my_board)
+my_board <- move_right(my_board)
+my_board <- move_right(my_board)
+my_board <- move_right(my_board)
+my_board
+```
+
+---
+
+```{r}
+# Move down by 6 (as we already start on 1)
+my_board <- move_down(my_board)
+my_board <- move_down(my_board)
+my_board <- move_down(my_board)
+my_board <- move_down(my_board)
+my_board <- move_down(my_board)
+my_board <- move_down(my_board)
+my_board
+```
+
+- `move_down()`: move Coral single space down
+- `move_right()`: move Coral single space right
+- `()`: activates the function. It's our 'go' command
+- Let's add some "arguments" to increase the usefulness of the function.
+
+---
+
+```{r}
+my_board <- start_new_game()
+```
+
+```{r}
+# Move right by 6 (as we already start on 1)
+my_board <- move_right(my_board, n = 6)
+# Move down by 6 (as we already start on 1)
+my_board <- move_down(my_board, n = 6)
+```
+
+---
+
+Now load the course data using a function (of course!)
+
+```{r, eval = FALSE}
+# the lab book way ... writing it all down
+my_file <- "./data/demographic-data.csv"
+```
+
+or
+
+```{r, eval = FALSE}
+# the pointy-clicky way
+my_file <- file_choose()
+```
+
+---
+
+Try some of the following functions on the course data, can you identify what they are doing?
+
+- `head()`
+- `tail()`
+- `summary()`
+- `mean()`
+
+---
+
+## Warning note
+
+- Functions are carrying out pre-written instructions
+- They will fail if they are supplied with the wrong kind of data - they will return an error message instead
+- Try `mean(group$gender)`
+- There are other constraints
+- Dependent on the function itself
+- HINT: some functions will not work with missing values
+- You will then need to specify the argument to remove these missing values
+
+class: inverse, center, middle
+
+# Packages
+
+---
+
+# Packages
+
+- `R` comes with some functions pre-installed called 'base R'.
+- Thousands of additional functions bundles together into 'packages'
+- Install these with the `install.packages()` function.
+- Activate them for use in your current session with `library()`.
+- `tidyverse`, which we have pre-installed for you. You need to activate it with `library()`
+
+---
+
+# Help Pages
+
+- Functions in `R` are extensively documented.
+- Type any function, preceded by a `?` for help.
+- These are technical documents, but learn to read them.
+- Opens the door to understanding how any function works in `R`.
+
+```{r}
+?mean()
+```
+
+---
+![](../img/rstudio-help-labelled.png)
+
+---
+
+The help page contains:
+1. A brief *Description* of the function
+1. an example of *usage*
+1. all the possible arguments that can be passed to the function (and whether they have default values)
+  - you can see an example here with `na.rm = FALSE` this shows you that the argument `na.rm` (should the function remove missing values) is automatically passed to the function with a value of `FALSE`.
+1. comprehensive details of how the function works and what to expect as an output
+1. A reproducible example of use, typically using manufactured data so you can use these examples yourself vertbatim.
+
+---
+
+![](../img/help_demo.jpeg)
+
+---
+
+# Exercises
+
+1. Can you explain the difference between the console and the source panes in R studio?
+2. In RStudio, have a look in the _Environment_ tab of the pane on the top right? What do you think is shown here?
+3. Try using the help function to find out what `ls()` does. Hint: try typing this in the search box of the _Help_ pane. Don't worry if the 'help' doesn't make much sense! Or just type `?ls` in the console.
