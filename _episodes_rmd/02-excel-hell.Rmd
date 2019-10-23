@@ -6,29 +6,17 @@ exercises: 2
 questions:
 - "---?"
 objectives:
-- "---."
-- "---."
+- "Describe some of the basic differences between data types."
+- "Summarise the pros and cons for different spreadsheet applications for storing your data."
+- "Demonstrate best practices for recording and formatting data in spreadsheets."
+- "Understand the correspondence between spreadsheet cells, columns and rows and data observations and values."
+- "Avoid the common mistakes when recording raw data."
+- "Be confident in building their own spreadsheet to collect data under best practices."
 keypoints:
-- "---"
-- "----"
+- "Excel and spreadsheet tools are useful if data is well organised"
+- "Try to think how data will be handled when imported"
 ---
 
-## Learning Objectives 
-
-<!-- Enumerate specific learning objectives in terms of what the learner will be able to completed by the end of the lesson -->
-
-<!--     * Excel Hell - (v1) Ed (v2) 
-        - [ ] live coding / practical session tidying a dirty sheet: use the RCT stuff
- -->
-
-By the end of the session, delegates should be able to:
-
-1. Describe some of the basic differences between data types
-2. Summarise the pros and cons for different spreadsheet applications for storing your data
-3. Demonstrate best practices for recording and formatting data in spreadsheets
-4. Understand the correspondence between spreadsheet cells, columns and rows and data observations and values
-5. Avoid the common mistakes when recording raw data
-6. Be confident in building their own spreadsheet to collect data under best practices
 
 ### Prerequisites
 
