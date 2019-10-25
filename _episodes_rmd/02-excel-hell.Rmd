@@ -70,7 +70,8 @@ A string is any sequence of characters. Literally anything you can type can be r
 This is essentially a special case of the decimal. Dates are simply integers counted up from a point in time (typically Jan 1st 1970 as convention). Time is given as a fraction of a single day. Obviously it's going to be very difficult for us to record today as `10467.56743`, as it's not remotely intuitive. We can still write the date and time in excel in a conventional way, but it's important to understand how this information is stored. When recording date and time information, it is often easier to separate out the two e.g. store date in a single column (in the format YYYY-MM-DD) and time in another (in the format HH:MM).
 
 Typing the same date into Excel will give you either the appearance or a different actual date.
-![](img/excel-dates.png)
+
+![]({% link fig/excel-dates.png %})
 
 > **Top Tip:** If you really want to make life easy in the future, separate out each day, month, year, hour and minute into separate columns. It's a greater investment, but can make handling dates easier in the future.
 
@@ -175,15 +176,15 @@ Most data will eventually be stored in something akin to a **comma separated val
 
 The computer doesn't care about formatting
 
-![](../assets/teaching_materials/src/images/data2csv-3.png)
+![]({% link fig/data2csv-3.png %})
 
 We do ... (just add some white space and dividers)
 
-![](../assets/teaching_materials/src/images/data2csv-2.png)
+![]({% link fig/data2csv-2.png %})
 
 And all excel does is present it to us in an easy to use format.
 
-![](../assets/teaching_materials/src/images/data2csv-1.png)
+![]({% link fig/data2csv-1.png %})
 
 But you always need to remember that you need to go back and forth between both formats.
 
@@ -203,15 +204,15 @@ original view only https://docs.google.com/spreadsheets/d/19NG6DEMxSQbU-DEiKGIWv
 
 We can use this data as an example of how to tidy your data in a spreadsheet application to make it ready for import to R. Using the cardinal rules, work in your pairs to transform this data an appropriate format for exporting to R.
 
-![](img/excel1.png)
+![]({% link fig/excel1.png %})
 
 The foundations of this data are good. But there are a few mistakes in how the data is formatted that we need to address.
 
-![](img/excel4.png)
+![]({% link fig/excel4.png %})
 
 First, we need to make sure that our headings are all on 1 line, with unique identifiers for head column name, with no spaces or special characters.
 
-![](img/excel7.png)
+![]({% link fig/excel7.png %})
 
 Other, more subtle changes include searching for any discrepancies in spelling and case. As a rule, we advovate having everything in lower case. It might not be perfect grammer, but keeping everything consistent throughout will prevent headaches down the line.
 
