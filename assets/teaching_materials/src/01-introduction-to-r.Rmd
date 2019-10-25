@@ -2,7 +2,7 @@
 title: "Introduction to R"
 author: "Ahmed Al-Hindawi & Steve Harris"
 institute: "The DataSciBC"
-date: "2019/09/17 (updated: `r Sys.Date()`)"
+date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts]
