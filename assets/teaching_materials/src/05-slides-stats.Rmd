@@ -1,87 +1,118 @@
 ---
-title: "Basic Statistics"
-
-output: 
-  powerpoint_presentation:
-    reference_doc: ../Images/template.pptx
+title: "Just Enough Statistics"
+author: "Ed Palmer"
+institute: "The DataSciBC"
+date: "2019/10/25 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
 ---
 
 ```{r, include = FALSE}
-# We will need this data later.
 library(tidyverse)
 library(lubridate)
-cchic <- read_csv("../clean_CCHIC.csv")
-cchic <- cchic %>%
-  mutate(los = (dmy(discharge) -
-    dmy(admission)))
+synth <- read_csv("./data/synthetic_data_clean.csv")
 ```
-
-##
-
-![](../Images/Clinician Coders Branding_FINAL_CMYK_Colour.png)
 
 ## Content
 
-- Types of Data
-- Exploring your dataset
-- Descriptive Statistics
-- Inferential Statistics
+- Descriptive Statistics - Descibing your data
+- Pitfalls of Inference - Power, P values and Confidence Infervals
 
-## Wait!
+---
 
-- Make sure `cchic` R dataframe from your work yesterday is loaded
-- Ensure this includes the variables you created including `los`
+## Learning Objectives
 
-::: notes
-Help them load the dataset if needed. This is the same one they used in the morning. It should include the length of stay variable.
-:::
+By the end of the session you should be able to:
 
-## The big picture
+- Use basic stats terms accurately
+- Have an intuition of how basic statistical tools work
+- Avoid bad habits
 
-- Research often seeks to answer a question about a larger population by collecting data on a small portion 
-- Data collection:
-    - Many variables
-    - For each person/unit.
+---
 
-## Descriptive and inferential statistics
+## Why study statistics
 
-- WAIT!
-- First be aware of the types of data 
-- Guides:
-    - How best to describe the data you have
-    - How best to analyse (which test)
-        - Note that data scientists and pure statisticians moving away from being ‘test-focused’, but will discuss how to run some basic ones in this lesson. 
+- Reproducibility crisis -> cargo cult statistics
+- More data != better science
+- Really useful in all walks of life (QI, research)
 
-## Data types
+---
 
-- Continuous 
+```{r, echo=FALSE, out.height=500}
+knitr::include_graphics("images/venn_data_science.jpeg")
+```
+
+---
+
+## How not to do statisitcs
+
+```{r, echo=FALSE, out.height=500}
+knitr::include_graphics("images/stats_flow_chart.jpg")
+```
+
+---
+
+## Fundamental Principles of Statistics
+
+- Use methods that are well understood and validated
+- Emphasize uncertainty
+- Maximise information use
+- Use procedures that are less likely to claim noise is signal
+- Present information intuatively
+
+---
+
+## Types of analysis
+
+- Descriptive
+- Inferential
+  - Hypothesis Testing
+  - Estimation
+  - Prediction
+
+---
+
+## Measure types
+
+- Binary: yes/no
+- Count: theoretical no upper limit, bound at zero
+- Continuous
 - Discrete
     - Nominal
     - Ordinal 
-    - Interval
 
-::: notes
-Data types have been covered in course before. The next few slides should be a bit of a recap.
-:::
-## Continuous variables
+---
 
-:::::::::::::: {.columns}
-::: {.column}
-- e.g. age, height, weight 
-- Have distributions:
-    - Gaussian
-    - Poisson
-    - Binomial
-    - Cauchy/Lorenz
+## Descriptive Statistics
 
-- Can’t be described
-:::
-::: {.column}
-![](../Images/ContinuousDistribution.png)
-:::
-::::::::::::::
+- How to describe a distribution of data
+- Use a mechanism to convey the underlying mechanism
 
-## What is normally distributed data?
+---
+
+- Binary: proportion of yes's
+- categorical: probability of group membership
+- Continuous:
+  - Probability Density (recognisable, but difficult to work with)
+  - Cumulative Density (easy to work with, but not particularly recognisable)
+  - Moments:
+    - Mean
+    - Variance (standard deviation)
+    - Skew
+    - Kurtosis
+    
+---
+
+## The Utility of having a named distribtion
+
+- Helps in making predictions in the future
+- Very reasonable assumption to draw inferences
 
 ![](../Images/NormalDistribution.png)
 

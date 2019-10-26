@@ -13,7 +13,6 @@ output:
       countIncrementalSlides: false
 ---
 
-
 # Disclaimer
 
 - Much of the following material can be sourced from open access resources
