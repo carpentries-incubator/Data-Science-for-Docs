@@ -30,23 +30,40 @@ synth <- read_csv("./data/synthetic_data_clean.csv")
 
 By the end of the session you should be able to:
 
-- Use basic stats terms accurately
-- Have an intuition of how basic statistical tools work
-- Avoid bad habits
+- Be able to describe data effectively.
+- Use basic statistics terminology correctly.
+- Understand statistical power, p values and confidence intervals.
+- Know where to go next for help.
 
 ---
 
-## Why study statistics
+## What is statisitcs?
 
-- Reproducibility crisis -> cargo cult statistics
-- More data != better science
-- Really useful in all walks of life (QI, research)
+Statistics is the discipline that concerns the collection, organization, displaying, analysis, interpretation and presentation of data
+
+Statistics is the science of learning from data
+
+Statistics != Hypothesis Testing
+
+---
+
+## What is data science?
+
+Arguably a rebranding of statistics.
 
 ---
 
 ```{r, echo=FALSE, out.height=500}
 knitr::include_graphics("images/venn_data_science.jpeg")
 ```
+
+---
+
+## the Big Picture
+
+- Draw a sample from a population
+- inspecting it, organising it, summarising it: Descriptive statistics
+- draw conclusions about the population: Inferential statistics
 
 ---
 

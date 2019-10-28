@@ -1,93 +1,131 @@
 ---
 source: Rmd
 title: "Just Enough Statistics"
-teaching: 10
-exercises: 2
+teaching: 50
+exercises: 10
 questions:
-- "---?"
+- "What is statistics?"
 objectives:
-- "---."
-- "---."
+- "Be able to describe data effectively."
+- "Use basic statistics terminology correctly."
+- "Understand statistical power, p values and confidence intervals."
+- "Know where to go next for help."
 keypoints:
-- "---"
-- "----"
+- "Statisitcs is the science of learning from data"
+editor_options: 
+  chunk_output_type: console
 ---
 
-<!-- rename file with the lesson name replacing template -->
+## Lesson
 
-## Learning Objectives 
+```{r, include = FALSE}
+library(tidyverse)
+library(lubridate)
+set.seed(101)
+df <- read_csv("../../../_episodes_rmd/data/synthetic_data_clean.csv")
+df <- df %>%
+  mutate(los = interval(arrival_dttm, discharge_dttm) / days(1),
+         age = interval(dob, arrival_dttm) / years(1))
 
-<!--     * Data viz - (v1) Finn (v2) Danny
-        ?do dataviz before stats because we want to emphasise the importance of looking at your data; therefore just focus on histograms/bar and scatter plots
-        - [ ] inspect before testing concept so dataviz of distribution before ttest etc
-        - [ ] ggplot2
-    * Stats - (v1) Sundiya (v2) 
-        - [ ] choose your test diagram
-        - [ ] simple tests
- -->    
-
-
-## Lesson 
+```
 
 ### The big picture
 
-Our RCT attempts to answer a research question by collecting data from a *sample* of a *population*.
+In general, we are attempting to answer a research question by collecting data from a *sample* of a *population*.
 
-Data collection consists in measuring the values of several *variables* for each member of the population.
+Data collection consists of measuring the values of several *variables* for each member of the population.
 
 First, we gain insight into the data we have collected by inspecting it, organising it, summarising it. This is *descriptive statistics*.
 
 Then, we use the data to draw conclusions about the population from which the sample is collected, and to test the reliability of those conclusions. This is *inferential statistics*.
 
+### Statistics != Hypothesis Testing
+
+Often, when people think of statistics, they think "what test should I do." Testing procedures, including null hypothesis significnace testing (NHST) are a  reletively small part of statistics. Scientific discovery should be much broader than simply asking "what test should I do". The best approach is to formalise a research question before collecting data, and then approach someone (i.e. a statistician) who can help formulate a method to answer it. This might involve working with clinicians, scientist, trialists and methodologists. Whatever you do, don't just collect data, and then look at a flow chart to find out what test you should perform. This is a terrible way to do science.
 
 ### Descriptive statistics
 
-#### Variables
+#### Measure types
 
-Variables may be *continuous* or *discrete*.
+Variables may use the following systems of measure:
+- Binary: yes/no e.g. is the patient alive or dead
+- Count: naturally bound at zero e.g. daily A&E admissions
+- Continuous: e.g. Age, height, weight
+- Discrete
+  - Nominal: e.g. eye colour
+  - Ordinal: e.g. likert approval scale
 
-Continuous variables can be measured with arbitrary precision. Think of the **age** variable in our dataset: we are measuring it to the nearest year, but in theory we could measure this in seconds, nanoseconds or even more accurately.
+Continuous variables can be measured with arbitrary precision. Think of **age**: we typically measure it to the nearest year, but in theory we could measure this in seconds, nanoseconds or even more accurately. Continuous variables contain the maximum amount of statistical information. If we discretise a continuous variable, e.g. place it into groupings like deciles, then we discard information. This should be avoided.
 
-In contrast, Discrete variables take only a fixed number of possible values. Look at the **random** variable in our dataset which only takes the values 'drain' and 'skin', or the **satisfaction** variable that takes only the values 'Poor', 'Satisfactory'', Good' and 'Excellent'.
+Discrete variables take only a fixed number of possible values. Look at the **sex** variable in our dataset which only takes the values 'F' and 'M'. There is no natural ording here so the values are nominal. Discrete values that have a natural order (e.g. a likert scale with "bad", "moderate", "good") are known as ordinal values.
 
-NB. The values of **random** don't seem to have any particular ordering, but the values for **satisfaction** do: 'Good' is higher than 'Satisfactory', and so on. We therefore call this an *ordinal* variable. However, are we sure that the distance between 'Poor' and 'Satisfactory' is the same as that between 'Good' and 'Excellent', etc? Maybe not. We should probably conclude, then, that the **satisfaction** variable isn't *interval*. It is worth thinking about these things because they affect the tests we can use later on.
-
+Different types of data are optimally presented in different ways. For example, binary data is presented succintly as the proportion of "yes", while continuous data might be better presented as the average result.
 
 #### Distributions
 
-Let's think about the **age** variable in our data can take, and how often it takes each one. We can visualise this with a histogram:
+When trying to convey information about data, we want to explain succintly what values the variable takes, and with what frequency this occurs. This is most commonly performed via a histogram.
 
-```
-# The 'breaks=20' part dictates how many 'bins' the histogram uses
-hist(RCT$age, breaks = 20)
+Let's think about the values **sodium** in our data can take, and how often it takes each one. We can visualise this with a histogram:
+
+```{r}
+df %>%
+  ggplot(aes(sodium)) +
+  geom_histogram(
+    binwidth = 2,
+    colour = "black",
+    fill = "white") +
+  xlim(c(100, 180)) +
+  theme_classic()
 ```
 
-Our RCT dataset contains 64 rows of observations, but imagine if it contained 1 million rows, or even more. We would start to build up a detailed picture of how often different ages occur in our data. This would be the *distribution* of the age variable. Let's look at a few of the other variables.
+This is fairly symetric, like a normal distribution, but the peak is a little too high, and the tails are a little too heavy.
 
-```
-hist(RCT$ps12)
-hist(RCT$id, breaks = 20)
+Our dataset contains 5000 rows of observations, but imagine if it contained 1 million rows, or even more. We would start to build up a more and more detailed picture of how often different sodiums occur in our data. This would be the *distribution* of the sodium variable. Let's overlay a normal distribution so we can see how close it is.
+
+```{r}
+df %>%
+ggplot(aes(x = sodium)) + 
+  geom_histogram(aes(y =..density..),
+                 breaks = seq(100, 180, by = 2), 
+                 colour = "black",
+                 fill = "white") +
+stat_function(fun = dnorm, args = list(mean = mean(df$sodium), sd = sd(df$sodium))) +
+  xlim(c(100, 180)) +
+  theme_classic()
 ```
 
-**ps12** could be described as right-tailed, or *right-skewed*. It might seem a bit irrelevant to plot a histogram for the **id** variable, but this is a great example of the *uniform distribution* (where all states of the variable are equally likely). There is another, very important distribution you will also have heard of:
+Let's explore some other variables in the data.
+
+```{r}
+df %>%
+  ggplot(aes(k)) +
+  geom_histogram(
+    binwidth = 0.2,
+    colour = "black",
+    fill = "white") +
+  theme_classic()
+
+df %>%
+  ggplot(aes(parse_number(id))) + geom_histogram(colour = "black",
+    fill = "white", bins = 30) +
+  theme_classic()
+```
+
+**potassium** could be described as right-tailed, or *right-skewed*. It might seem a bit irrelevant to plot a histogram for the **id** variable, but this is a great example of the *uniform distribution* (where all states of the variable are equally likely).
+
+The normal distribtuion is perhaps the most well known distribution. We see this bell shaped curve throughout nature, whereever small additions and subtractions are being made. For example, in the many thousands or genetic and enviromental components that determine an individuals height.
 
 ![Several normal distributions](https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Normal_Distribution_PDF.svg/2000px-Normal_Distribution_PDF.svg.png)
 
-We can see how the centre-point of the bell curve shifts right and left as the mean of the distribution changes, and how the thin-ness or fatness of the distribution alters as we change the standard deviation.
+We can see how the centre-point of the bell curve shifts right and left as the mean of the distribution changes. This is why the mean is known is a measure of location. The thin-ness or fatness of the distribution alters as we change the standard deviation. This is why the standard deviation is a measure of spread.
 
-A key question to ask yourself as you inspect the histograms for your data is, does this variable approximate the normal distribution? That is, if we kept taking more-and-more observations in our experiment, would the histogram we obtain look more-and-more like a bell-curve? Again, this is important to think about because if affects the tests we can use later.
+A key question to ask yourself as you inspect the histograms for your data is, does this variable look like the normal distribution? That is, if we kept taking more-and-more observations in our experiment, would the histogram we obtain look more-and-more like a bell-curve? Normally distributed data is convenient to present and analyse, as is can be described perfectly by only two numbers: the mean and the sd.
 
-It actually turns out that none of the variables in our RCT are normally distributed (age comes the closest, but it is too left-skewed). Let's pretend for a second that the age data were normal:
-    
-```
-RCT$fake_age <- rnorm(nrow(data), mean = 50, sd = 2))  
-hist(RCT$fake_age)
-```
+Whenever you see means, modes, medians, standard deviations and interquartile ranges descried in a research paper, the end goal is to try to draw the full distribtuion, but just using a few numbers to do so.
 
+#### Describing Location
 
-#### Means, medians and modes
-
-Recall:
+The location is the measure of central tendancy of the data. It is the peak of the bell curve for example.
 
 - Mean = sum of all datapoints/number of datapoints
 - Median = middle datapoint, if all data were arranged in order on a line
@@ -95,118 +133,219 @@ Recall:
 
 ![Mean, median, mode](https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Comparison_mean_median_mode.svg/2000px-Comparison_mean_median_mode.svg.png)
 
-Try calculating the mean and median for the following data columns: `age`, `ps12`, `move24h`
+For normally distributed data, all 3 measures of location align.
 
+Try plotting histograms, calculate the mean and median for the following data columns:
+  - `wbc`, `crp`, `platelets`, `hb`
+Are the mean and median good at describing these distributions
 You can use the following functions: `mean()` and `median()`
 
 For measuring the 'spread' of the data:
 
 - For normally-distibuted data, use standard deviation
-- for non normally-distributed data, use interquartile range, i.e if all data were arranged in order on a line, the range between 25% and 75% along this line
+- for non normally-distributed data, the lower and upper quartiles are often used i.e if all data were arranged in order on a line, the values in the 25th and 75th centiles. Similarly the median was just the 50th centile
+
+Take care not to confused the interquartile range (a single number) and the lower and upper quartiles (two numbers). Both are used to describe spread.
 
 You can calculate lots of useful descriptive statistics in one fell swoop using just one simple R function:
 
-```
-summary(RCT)
+```{r}
+summary(df)
 ```
 
+It is important to always plot your data, as these summary terms seldom fully describe your data.
+
+```{r}
+include_graphics("./img/anscombes_quartet.png")
+```
 
 ## Inferential Statistics
 
-It's easy (especially using R) to plug numbers into a multitude of tests, and get answers out. However, your answers will only be meaningful if you think carefully about:
+The following core concepts are central to inferential statistics, and often misunderstood:
+- Power
+- P values
+- Confidence intervals.
 
-1. The hypothesis you want to test
-2. Where your observations come from
-3. The type of variables you are dealing with
-4. The assumptions that different tests use
-5. Interpreting the test results
+If we can leave today with a strong intuition for these concepts, the rest will come easily.
 
-The best person to advise you properly on the above is your friendly neighbourhood statistician, but in the absence of this we will outline a few simple things for you to think about.
+All these concepts are part of the frequentist approach to statistics. In that they are hypothetical quantities that are valid in the long run, if we were to repeat an experiment infinately many times. Usually we can only perform 1 exeriment, and so this point is often confused.
 
+We will use simulation to show visually exactly what these different quantities mean.
 
-### Chi-squared
+### Power
 
-Let's test this hypothesis:
+The power of a test (often written as a percentage) is the probability that the test will reject the test hypothesis at a pre-sepcified signficance level. This signifiance level is usually (and arbitrarily) set to 0.05.
 
-> 'Patient satisfaction after axillary node dissection depends on whether they received local anaesthetic via the drain or injection to the skin flaps.'
+In plain english. If I were to repeat a study 1000 times, and I have 80% power at the 0.05 significance level, then I would expect 800 of the experiements to have a p value <= 0.05.
 
-So, our *independent variable* (the one we are deliberately changing between group) is the **random** column in our data, and our *dependent variable* (the one we are looking for changes in) is the **satisfaction** column in our data.
+Power is a pre-study probability. It is defined, and fixed before starting an experiment. Occationally you will see "post-hoc power" which is meaningless and to be avoided.
 
-Think back to your epidemiology lectures and remember that we will technically be testing for evidence against the *null hypothesis* of no effect:
+We can set up a simulation where we sample 8 men and 8 women from the general public. We want to know, "are the heights in these two groups different?". Perhaps this comes from our research question: "Are men taller than women?".
 
-> 'Patient satisfaction after axillary node dissection **does not** depend on whether they received local anaesthetic via the drain or injection to the skin flaps.'
+We can fix the average male and female height to be 1.75 m and 1.6 m respectively. Normally we can't ever know these quantities (hence why we want to sample in the first place) but by fixing these in the simulation, we get to oberserve the power of the study.
 
-As we said before, **random** and **satisfaction** are both discrete variables, so it sounds like using the *chi-squared test for independence* might be a good plan here. Let's look at a table of just the variables we are interested in.
+```{r, include = FALSE}
+p_values <- c()
 
-```
-tbl = table(RCT$random, RCT$satisfaction)
-tbl
-```
+for (i in 1:1000) {
+men <- rnorm(8, 1.75, sd = 0.1)
+women <- rnorm(8, 1.60, sd = 0.1)
+p_values <- c(p_values, t.test(x = men, y = women, paired = FALSE, var.equal = TRUE)$p.value)
+}
 
-There are 35 patients in the 'drain' group and 29 in the 'skin' group, and if the null hypothesis is true R can work out what counts it would expect to see in each table cell proportional to this.
-
-Using this test might not be such a good idea after all, as some of the counts in the table (e.g. for those patients who rated their satisfaction as 'Poor') are very low. Intuitively, we wouldn't read too much into data from just 3 patients, and applying a statistical test can't change that. As a rule of thumb, you shouldn't use this test unless you have counts of 5 or over in every cell of the table.
-
-Were we to press on and run the test anyway, it only takes a few keystrokes. Before we do so, however, we should decide what a significant result will look like. Let's use the common, but arbitrary threshold of a p value of 0.05 or lower to constitute significant evidence against the null hypothesis.
-
-```
-chisq.test(tbl)
-# X-squared = 2.249, data = 3, p-value = 0.5224
+sim <- tibble(
+    trial_number = 1:1000,
+    p_value = p_values)
 ```
 
-R has helpfully calculated the 'degrees of freedom' and a p value for us, which achieves nothing like significance.
+So we have performed 1000 simulated experiements, and placed the results into a dataframe `sim`.
 
-
-### Mann-Whitney U test
-
-But wait, we said earlier that **satisfaction** is an ordinal variable. We can use this fact to test our hypothesis in a different way, but first we have to less R know that this ordering exists (if we haven't done this earlier):
-
-```
-RCT$satisfaction <- factor(RCT$satisfaction, levels=c("poor", "satisfactory", "good", "excellent"), ordered=TRUE)
-RCT$random<- factor(RCT$random, levels=c("drain", "skin"))
+```{r}
+sim %>%
+  group_by(signficant = p_value <= 0.05) %>%
+  tally()
 ```
 
-Let's look at the the *class-conditional distributions* we will be comparing. This is a fancy term for comparing the histograms of the **satisfaction** variable patients in the 'drain' group vs. patients in the 'skin' group. Note that we have to use the (slightly clunky) *as.numeric()* function here, to get our data in the right format so that R doesn't get confused.
+So we can see that the power to detect a 15 cm difference in height, at the 0.05 significance, for 8 subjects in each group is around 80%.
 
+Even though we know that the underlying populations differ by 15 cm (we fixed that), we were unable to find this difference in 20% of cases. These 20% are "false negatives". There is a true difference, but we did not detect it. The remaining 80% are the true positives. This is the direct interpretation of statistical power.
+
+Since we don't want to be wrong often, how might we increase the power? For a given effect size (15 cm difference in our simulation), we can do so by increasing the number of people in the study.
+
+Let's look at how the power changes as we increase the number of people in each group from 8 to 50.
+
+```{r, include = FALSE}
+p_values <- c()
+
+for (i in seq(from = 2, to = 50, by = 2)) {
+    for(j in 1:1000) {
+      men <- rnorm(i, 1.75, sd = 0.1)
+     women <- rnorm(i, 1.60, sd = 0.1)
+    p_values <- c(p_values, t.test(x = men, y = women, paired = FALSE, var.equal = TRUE)$p.value)
+    }
+}
+
+sim <- tibble(
+    subjects = rep(seq(from = 2, to = 50, by = 2), each = 1000),
+    p_value = p_values)
 ```
-hist(as.numeric(df$satisfaction[which(df$random=='drain')]))
-hist(as.numeric(df$satisfaction[which(df$random=='skin')]))
+
+```{r}
+sim %>%
+    group_by(subjects) %>%
+    summarise(significant = sum(p_value <= 0.05)/n()) %>%
+    ggplot(aes(x = subjects, y = significant)) + geom_point() +
+    geom_hline(yintercept = 0.8, linetype = 2, colour = "red") +
+    geom_hline(yintercept = 0.9, linetype = 2, colour = "blue") +
+  theme_classic() +
+  ylab("Proportion of Experiments with P <= 0.05") +
+  xlab("Number of subjects in each arm")
 ```
 
-Judging by eye, it looks like patients in the 'drain' group were a bit more satisfied. Let's test this assumption more formally using a statistical test, remembering that:
+We can see that in order to find a difference of 15 cm, we have about 80% power with 8 subjects in each arm, and 90% power with 10 subjects. By the time we get to 30 subjects, we will seldom be unable to detect the difference.
 
-- Our independent variable is binary (discrete with just 2 possible values)
-- Our dependent variable is ordinal, but not interval
-- We are comparing observations from different patients, so we need an *unpaired* (if instead we were comparing observations from the same patient at different times, we would want a *paired* test
+#### Traps to avoid
 
-The *Mann-Whitney U test* fits well with the above, and we run it like so:
+The power is not a direct probability in relation to an individual experiment. For example, it is *not* the probabilty that a specific experiment performed is a true positive. The probability that any specific experiment is a true positive is either 1 or 0, we just don't know which.
 
+Statistical significance is a messy topic, and probaby partly to blame for the reproducibility crisis. Statisical power shows us why we should expect studies to differ in their findings. If we imagine 2 independent studies trying to investigate the same issue (for example low tidal volume ventilation). And they are both powered at 80%. Then the probability that both studies will have a p value below 0.05 will be `0.8*0.8 = 0.64`. The chance that 1 will be "positive" and the other be "negative" is `2*0.8*0.2 = 0.32`. So there is actually nearly a 1/3rd chance that these studies will "differ" in their findings.
+
+### P Values
+
+The p value is the probability that, given all your assumptions are true, and that the null hypothesis is also true, of seeing data this or more extreme. The p value is another hypothetical frequency probability. It is another long running measure.
+
+It is not the probability of a false positive. Again, the probability that you are right or wrong, is either 1 or 0, we just don't know which. If you were to repeat a null experiment an infinate number of times (remember that the p value assumes the null hypothesis to be true), then the p value converges to the proportion of false positives. Let's use simulation again to show this.
+
+Since the properties of the p value are readily demonstrated under the null condition, we will modify our experiemtn to sample 8 men, and then 8 more men, both with average heights of 1.75 m. So we know apriori, that there is no difference between these groups.
+
+```{r}
+p_values <- c()
+
+for (i in 1:1000) {
+men_a <- rnorm(8, 1.75, sd = 0.1)
+men_b <- rnorm(8, 1.75, sd = 0.1)
+p_values <- c(p_values, t.test(x = men_a, y = men_b, paired = FALSE, var.equal = TRUE)$p.value)
+}
+
+sim <- tibble(
+    trial_number = 1:1000,
+    p_value = p_values)
+
+sim %>%
+    group_by(signficant = p_value <= 0.05) %>%
+    tally()
 ```
-wilcox.test(
-	as.numeric(df$satisfaction[which(df$random=='drain')]),
-	as.numeric(df$satisfaction[which(df$random=='skin')])
-)
+
+As you can see, under this situation, where there was in fact no difference, around 5% of the experiements came up "significant". These are false positives by definition.
+
+The p value is simply a measure of compatability between your data and your model (which includes all assumptions, including that the null hypothesis is true). A p value close to 0 means the data is highly incompatable with your model. Since your model includes the assumption that the null hypotheiss is true, it can act as evidence against the null hypotheiss.
+
+#### Traps to avoid
+
+A large p value does not mean *no differnce*. A large p value just means that you couldn't detect a difference. It simply means that the data is compatable with your model (which includes the assumption that the null hypothesis is correct)
+
+### Confidence Intervals
+
+Confidence intervals are another long running property of experiments. They are based upon the p value, and define a range of values that are compatable with the data.
+
+```{r, include = FALSE}
+lower_ci <- c()
+upper_ci <- c()
+p_value <- c()
+
+for (i in 1:100) {
+men_a <- rnorm(8, 1.75, sd = 0.1)
+men_b <- rnorm(8, 1.75, sd = 0.1)
+t_test <- t.test(x = men_a, y = men_b, paired = FALSE, var.equal = TRUE)
+lower_ci <- c(lower_ci, t_test$conf.int[1])
+upper_ci <- c(upper_ci, t_test$conf.int[2])
+p_value <- c(p_value, t_test$p.value)
+}
+
+sim <- tibble(
+    trial_number = 1:100,
+    p_value = p_value,
+    lower_ci = lower_ci,
+    upper_ci = upper_ci)
 ```
 
-Once again, our p value is under our predetermined threshold, so we shouldn't conclude that there is a significant difference between groups. At most, we see a 'trend towards significance' which might serve as inspiration for a larger study.
+```{r}
+sim %>%
+    mutate(significant = p_value <= 0.05) %>%
+    ggplot(aes(x = trial_number)) +
+    geom_linerange(aes(ymin = lower_ci, ymax = upper_ci, colour = significant)) +
+    theme_classic() +
+    geom_hline(yintercept = 0, linetype = 2) +
+  xlab("Experiment Repeat")
+```
 
+```{r}
+lower_ci <- c()
+upper_ci <- c()
+p_value <- c()
 
-## More tests
+for (i in 1:100) {
+men <- rnorm(8, 1.75, sd = 0.1)
+women <- rnorm(8, 1.60, sd = 0.1)
+t_test <- t.test(x = men, y = women, paired = FALSE, var.equal = TRUE)
+lower_ci <- c(lower_ci, t_test$conf.int[1])
+upper_ci <- c(upper_ci, t_test$conf.int[2])
+p_value <- c(p_value, t_test$p.value)
+}
 
-A really handy resource for looking up which test to use, and then how to implement it in R, is [UCLA Which test?](http://www.ats.ucla.edu/stat/mult_pkg/whatstat/). Another helpful resource is [BMJ Which test?](http://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/13-study-design-and-choosing-statisti).
+sim <- tibble(
+    trial_number = 1:100,
+    p_value = p_value,
+    lower_ci = lower_ci,
+    upper_ci = upper_ci)
 
-
-
-## Exercises
-
-### Questions
-
-### Answers
-
-
-
----
-
-[Previous topic](06-lesson-06-ggplot2.html) --- [Next topic](08-lesson-08-data-analysis-worksheet.html)
+sim %>%
+    mutate(significant = p_value <= 0.05) %>%
+    ggplot(aes(x = trial_number)) +
+    geom_linerange(aes(ymin = lower_ci, ymax = upper_ci, colour = significant)) +
+    theme_classic() +
+    geom_hline(yintercept = 0, linetype = 2) +
+    xlab("Experiment Repeat")
+```
 
 
