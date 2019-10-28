@@ -15,7 +15,7 @@ output:
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 library(tidyverse)
-synth_data <- read_csv("./data/synthetic_data_clean.csv")
+synth_data <- read_csv("../../../_episodes_rmd/data/synthetic_data_clean.csv")
 ```
 
 class: inverse, center, middle
