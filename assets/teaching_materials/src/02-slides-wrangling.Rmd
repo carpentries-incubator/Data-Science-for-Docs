@@ -10,6 +10,8 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+editor_options: 
+  chunk_output_type: console
 ---
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
@@ -17,16 +19,16 @@ options(htmltools.dir.version = FALSE)
 
 class: inverse, center, middle
 
-# Lesson #2: Data Wrangling
+# Lesson #4: Data Wrangling
 
 ---
 
 # Learning Objectives
 
 By the end of this session, you should be able to:
-- Use the **tidyverse** packages to build your first data pipeline.
-- Import the data to R
-- Manipulate and clean the data
+- Use the **tidyverse** package to build your first data pipeline
+- Perform basic data manipulation tasks
+- Inspect and summarise data
 
 ---
 
@@ -79,17 +81,15 @@ library(lubridate)
 
 # Import the Course Data
 
-For the purposes of ESICM, we have already included data in your RStudio instance. To import this into R, we simply need to run a function and that read the csv files: `read_csv()`
+We have already included data in your RStudio instance.
+To import this into R, we simply need to run a function and that read the csv files: `read_csv()`.
 
 ```{r, include = FALSE}
-long_df <- read_csv("~/_data/esicm/longitudinal-data.csv", col_types = "?dddddddddddddddddcdddcdddddd")
-demo_df <- read_csv("~/_data/esicm/demographic-data.csv")
+df <- read_csv("../../../_episodes_rmd/data/synthetic_data_clean.csv")
 ```
 
-
 ```{r, eval = FALSE}
-long_df <- read_csv("./data/longitudinal-data.csv")
-demo_df <- read_csv("./data/demographic-data.csv")
+df <- read_csv("./data/synthetic_data_clean.csv")
 ```
 
 ---
@@ -105,13 +105,7 @@ demo_df <- read_csv("./data/demographic-data.csv")
 ---
 
 ```{r}
-long_df
-```
-
----
-
-```{r}
-demo_df
+df
 ```
 
 ---
@@ -121,13 +115,7 @@ Another very powerful way to view the data is to use the `glimpse` function
 ---
 
 ```{r}
-glimpse(long_df)
-```
-
----
-
-```{r}
-glimpse(demo_df)
+glimpse(df)
 ```
 
 ---
@@ -139,12 +127,12 @@ A useful _grammar_ for data manipulation.
 First, let's _filter_ the demographic data by row
 
 ```{r}
-filter(demo_df, height >= 180)
+filter(df, height >= 1.8)
 ```
 
 ---
 
-This _filters_ rows from the `demo_df` data frame where `height` is greater than or equal to `180`cm.
+This _filters_ rows from the `demo_df` data frame where `height` is greater than or equal to `1.8`m.
 
 ---
 
@@ -165,10 +153,22 @@ Will throw away any data that doesn't meet your request.
 
 ---
 
+```{r}
+include_graphics("./img/filter.png")
+```
+
+---
+
 A similar function called `select` acts over columns. Just want the `sex` colum?
 
 ```{r}
-select(demo_df, sex)
+select(df, sex)
+```
+
+---
+
+```{r}
+include_graphics("./img/select.png")
 ```
 
 ---
@@ -188,8 +188,8 @@ background-image: url(../img/pipe.jpeg)
 Now here comes the _proper_ magic. What if you want to both filter and select?
 
 ```{r}
-demo_df %>%
-  filter(height >= 180) %>%
+df %>%
+  filter(height >= 1.8) %>%
   select(sex)
 ```
 
@@ -226,11 +226,12 @@ The benefit of writing code like this:
 ---
 
 ```{r}
-# Summarise
-demo_df %>%
-  filter(height >= 180) %>%
+# Tally by a group
+df %>%
+  filter(height >= 1.8) %>%
   select(sex) %>%
-  table()
+  group_by(sex) %>%
+  tally()
 ```
 
 ---
@@ -247,7 +248,7 @@ Armed with only these 6 functions, you can accomplish a huge amount that would b
 ---
 
 ```{r}
-demo_df %>%
+df %>%
   select(height, weight, sex) %>%
   arrange(height)
 ```
@@ -255,7 +256,22 @@ demo_df %>%
 ---
 
 ```{r}
-demo_df %>%
+include_graphics("./img/arrange.png")
+```
+
+---
+
+```{r}
+df %>%
+  group_by(sex)
+```
+
+on it's own, `group_by` doesn't really accomplish anything useful. The utility is apparant when we combine with a summary function.
+
+---
+
+```{r}
+df %>%
   group_by(sex) %>%
   summarise(average_height = mean(height, na.rm = TRUE))
 ```
@@ -263,52 +279,83 @@ demo_df %>%
 ---
 
 ```{r}
-demo_df %>%
-  mutate(bmi = weight / (height/100)^2) %>%
+include_graphics("./img/group_by.png")
+```
+
+---
+
+```{r}
+include_graphics("./img/summarise.png")
+```
+
+---
+
+```{r}
+df %>%
+  mutate(bmi = weight / height^2)
+```
+
+---
+
+```{r}
+include_graphics("./img/mutate.png")
+```
+
+---
+
+```{r}
+df %>%
+  mutate(bmi = weight / height^2) %>%
   select(weight, height, bmi) %>%
   arrange(desc(bmi))
 ```
 
 ---
 
+# Exercise
+
+Use the functions you have just learnt to:
+- Find the mean apache score for survivors and non-survivors
+- Create a new column with the highest temp from temp_c and temp_nc
+
+---
+
 ## Data Cleaning
 
 ```{r}
-names(demo_df)
+names(df)
 ```
 
 ---
 
-It looks like the `discharge` variable is a little ambiguously named. Let's change that so it is clear.
+Some of these variable names are too vague for my liking.
+- chemo: active or historical?
+- na: too similar to the R concept of "missing" i.e. NA
+- system: a little ambiguous
+
+```{r, eval = FALSE}
+df <- df %>%
+  rename(new_name = old_name)
+```
+
+---
 
 ```{r}
-demo_df <- demo_df %>%
-  rename(discharge_dttm = discharge)
+df <- df %>%
+  rename(chemo_6_months = chemo,
+         sodium = na,
+         organ_system = system)
 ```
 
 ---
 
 # Wrangling strings
 
-```{r}
-demo_df <- demo_df %>%
-  separate(
-    col = primary_adm,
-    into = c("pt_type", "organ_system"),
-    sep = "\\.",
-    remove = FALSE
-    )
-```
-
----
+## Extracting Numbers
 
 ```{r}
-demo_df <- demo_df %>%
-  mutate(pt_type = extract_numeric(pt_type)) %>%
-  mutate(organ_system = extract_numeric(organ_system))
-
-demo_df %>%
-  select(primary_adm, pt_type, organ_system)
+df %>%
+  mutate(lactate_abg = parse_number(lactate_abg))
 ```
 
 ---
@@ -316,21 +363,30 @@ demo_df %>%
 # Parsing dates
 
 ```{r}
-demo_df %>%
-  select(dob, discharge_dttm) %>%
-  glimpse()
+df <- df %>%
+  mutate(los = interval(arrival_dttm, discharge_dttm) / days(1))
+
+df %>%
+  select(los)
 ```
 
 ---
 
+## Pivoting Data
+
 ```{r}
-library(lubridate)
-all_admissions <- ymd_hms("2000-01-01 00:00:00")
-
-demo_df <- demo_df %>%
-  mutate(age = interval(dob, all_admissions) / years(1)) %>%
-  mutate(los = interval(all_admissions, discharge_dttm) / days(1))
-
-demo_df %>%
-  select(age, los)
+df_long <- df %>%
+  pivot_longer(
+    cols = c("lactate_1hr", "lactate_6hr", "lactate_12hr"),
+    names_to = "lactate_time",
+    values_to = "lactate_value") %>%
+  select(id, lactate_time, lactate_value)
 ```
+
+---
+
+### Exercise
+
+Use the functions you have just learnt to:
+- Find the mean los for survivors and non-survivors
+- Calculate the age on arrival for these patients
