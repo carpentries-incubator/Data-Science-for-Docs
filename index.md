@@ -13,8 +13,12 @@ in working with {{page.domain }} data in {{page.topic }}.
 {% comment %} This is a comment in Liquid {% endcomment %}
 
 > ## Prerequisites
->
-> Stuff here
+> Before the course : Complete the pre-course questionnaire (emailed)
+> Charge your laptop
+> Install R and R studio. We will be using RStudio Cloud, but we want you to go away with the tools at the end of the day.
+> Join our group on Slack
+> Bring along a dataset that you want to use in the course.
+> Tell us about any special dietary or access requirements
 {: .prereq}
 
 {% include links.md %}
