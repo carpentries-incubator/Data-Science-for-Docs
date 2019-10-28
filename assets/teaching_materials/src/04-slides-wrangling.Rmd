@@ -15,6 +15,7 @@ editor_options:
 ---
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+library(knitr)
 ```
 
 class: inverse, center, middle
@@ -355,7 +356,7 @@ df <- df %>%
 
 ```{r}
 df %>%
-  mutate(lactate_abg = parse_number(lactate_abg))
+  mutate(lactate_ = parse_number(lactate_abg))
 ```
 
 ---
