@@ -30,6 +30,24 @@ class: center, middle, inverse, title-slide
 ---
 
 
+
+```
+## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.2.0     ✔ purrr   0.3.2
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+## ✔ tidyr   0.8.3     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
 # Disclaimer
 
 - Much of the following material can be sourced from open access resources
@@ -182,7 +200,7 @@ You should see:
 - Variables
 - Data
     - Vectors
-    - Data Frames
+    - Tibbles
 - Functions
     - Stored in packages
 
@@ -195,7 +213,7 @@ You should see:
 - Data
     - Data comes in different forms: Real Numbers/Counting Numbers/Characters etc.
     - Data is stored in vectors
-    - Vectors are stored in data frames
+    - Vectors are stored in tibbles
 - Functions
     - Little factories
     - Take an input (raw material) use function (factory) get an output (product)
@@ -258,7 +276,7 @@ say hello &lt;- "hello"
 - It is built around an understanding of data
 - Statistics uses:
     - Vectors
-    - Data frames
+    - Tibbles
 
 ---
 
@@ -348,27 +366,18 @@ name[5]
 
 ---
 
-# Data Frames.
-- You are already familiar with data frames
+# Tibbles
+- You are already familiar with tibbles
 
 
-```
-##       name age gender
-## 1     Adam  50   male
-## 2    Sally  25 female
-## 3      Eve  32 female
-## 4     John  67   male
-## 5    James  46   male
-## 6 Jennifer  19 female
-```
 
-- A data frame is a series of vectors aligned to form a table
+- A `tibble` is a series of vectors aligned to form a table
 - Each vector becomes a column in the table
-- A *properly formatted* excel spreadsheet is essentially a data frame
+- A *properly formatted* excel spreadsheet is essentially a tibble
 
 ---
 
-# Creating a data frame - excercise
+# Creating a tibble - excercise
 
 - Create and name vectors containing information about these 6 patients.
     - `Name: "Adam", "Sally", "Eve", "John", "James", "Jennifer"`
@@ -382,19 +391,21 @@ name[5]
 ---
 
 
-# Creating a data frame - exercise
-- Combine these vectors into a data frame using `data.frame()`
+# Creating a tibble - exercise
+- Combine these vectors into a tibble using `tibble()`
     - Hint, the vector names need to go inside the `()`
-- Save the data frame under the name `patients`
-- Print the data frame called `patients` to your console
+- Save the tibble under the name `patients`
+- Print the tibble called `patients` to your console
 
 ---
 
-# Creating a data frame - solution
+# Creating a tibble - solution
 
 
 
 ```r
+# use the tidyverse modules
+library(tidyverse)
 # Creating individual vectors.
 
 name &lt;- c("Adam", "Sally", "Eve", "John", "James", "Jennifer")
@@ -402,29 +413,33 @@ age &lt;- c(50, 25, 32, 67, 46, 19)
 gender &lt;- c("male", "female", "female", "male", "male", "female")
 
 
-# Combining into a data frame.
+# Combining into a tibble
 
-patients &lt;- data.frame(name, age, gender)
+patients &lt;- tibble(
+  "name" = name,
+  "age" = age,
+  "gender" = gender
+)
 ```
 
 ---
 
-# This is the data frame.
-<div id="htmlwidget-60a837740c09b81aa081" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-60a837740c09b81aa081">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6"],["Adam","Sally","Eve","John","James","Jennifer"],[50,25,32,67,46,19],["male","female","female","male","male","female"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>name<\/th>\n      <th>age<\/th>\n      <th>gender<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":3,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+# This is the Tibble.
+<div id="htmlwidget-1243fa9335bb9f716968" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1243fa9335bb9f716968">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6"],["Adam","Sally","Eve","John","James","Jennifer"],[50,25,32,67,46,19],["male","female","female","male","male","female"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>name<\/th>\n      <th>age<\/th>\n      <th>gender<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":3,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
-- R arranges the vectors as columns in the data frame
-- R names the columns of the data frame after the names of the vectors
-- R numbers each row of the data frame
+- R arranges the vectors as columns in the tibbles
+- R names the columns of the tibble after the names of the vectors
+- R numbers each row of the tibble
 
 ---
 
 
 
-# Recalling a vector in a data frame
-- Data frame columns are vectors.
-- `$` can be used to extract a vector from a data frame.
-- We can get the `age` column from the data frame `group`
+# Recalling a vector in a tibble
+- Tibble columns are vectors.
+- `$` can be used to extract a vector from a tibble.
+- We can get the `age` column from the tibble `group`
 
 ```r
 patients$age
@@ -504,31 +519,22 @@ str(test2)
 
 # Functions
 - You have been using functions already!
-- `data.frame()` is a function.
-- `age, gender, weight` are arguments.
+- `tibble()` is a function.
+- `age, gender, gender` are arguments.
 
 
 ```r
-data.frame(name, age, gender)
+tibble("name" = name, 
+       "age" = age, 
+       "gender"= gender)
 ```
 
-```
-##       name age gender
-## 1     Adam  50   male
-## 2    Sally  25 female
-## 3      Eve  32 female
-## 4     John  67   male
-## 5    James  46   male
-## 6 Jennifer  19 female
-```
-
-- The data frame is the output
+- The tibble is the output
 
 ---
 
 # Try these functions yourself. What do they do?
 
-- Use the `group` data frame as the argument.
 - `head()`
 - `tail()`
 - `summary()`
@@ -549,7 +555,7 @@ data.frame(name, age, gender)
 - Functions are carrying out pre-written instructions
 - They will fail if they are supplied with the wrong kind of data - they will return an error message instead
     - or worse, process the information silently producing a result that could be meaningless
-- Try `mean(group$gender)`
+- Try `mean(patient$gender)`
 - There are other constraints
 - Dependent on the function itself
 - *HINT*: some functions will not work with missing values

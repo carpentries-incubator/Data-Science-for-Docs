@@ -14,6 +14,7 @@ keypoints:
 - "Statistics is the science of learning from data"
 editor_options: 
   chunk_output_type: console
+graphics: yes
 ---
 
 ## Lesson
@@ -171,7 +172,7 @@ summary(df)
 It is important to always plot your data, as these summary terms seldom fully describe your data. See the example below. The data points presented all share the same mean, standard distribution and correlation.
 
 ```{r}
-include_graphics("./img/anscombes_quartet.png")
+knitr::include_graphics("./img/anscombes_quartet.png")
 ```
 
 ## Inferential Statistics

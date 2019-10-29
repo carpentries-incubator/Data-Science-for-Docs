@@ -13,6 +13,10 @@ output:
       countIncrementalSlides: false
 ---
 
+```{r, echo=FALSE}
+library(tidyverse)
+```
+
 # Disclaimer
 
 - Much of the following material can be sourced from open access resources
@@ -164,7 +168,7 @@ You should see:
 - Variables
 - Data
     - Vectors
-    - Data Frames
+    - Tibbles
 - Functions
     - Stored in packages
 
@@ -177,7 +181,7 @@ You should see:
 - Data
     - Data comes in different forms: Real Numbers/Counting Numbers/Characters etc.
     - Data is stored in vectors
-    - Vectors are stored in data frames
+    - Vectors are stored in tibbles
 - Functions
     - Little factories
     - Take an input (raw material) use function (factory) get an output (product)
@@ -226,7 +230,7 @@ say hello <- "hello"
 - It is built around an understanding of data
 - Statistics uses:
     - Vectors
-    - Data frames
+    - Tibbles
 
 ---
 
@@ -289,21 +293,25 @@ name[5]
 
 ---
 
-# Data Frames.
-- You are already familiar with data frames
+# Tibbles
+- You are already familiar with tibbles
 
 ```{r, echo = FALSE}
 gender <- c("male", "female", "female", "male", "male", "female")
-data.frame(name, age, gender)
+my_tibble = tibble(
+  "name" = name,
+  "age" = age,
+  "gender" = gender
+)
 ```
 
-- A data frame is a series of vectors aligned to form a table
+- A `tibble` is a series of vectors aligned to form a table
 - Each vector becomes a column in the table
-- A *properly formatted* excel spreadsheet is essentially a data frame
+- A *properly formatted* excel spreadsheet is essentially a tibble
 
 ---
 
-# Creating a data frame - excercise
+# Creating a tibble - excercise
 
 - Create and name vectors containing information about these 6 patients.
     - `Name: "Adam", "Sally", "Eve", "John", "James", "Jennifer"`
@@ -317,18 +325,20 @@ data.frame(name, age, gender)
 ---
 
 
-# Creating a data frame - exercise
-- Combine these vectors into a data frame using `data.frame()`
+# Creating a tibble - exercise
+- Combine these vectors into a tibble using `tibble()`
     - Hint, the vector names need to go inside the `()`
-- Save the data frame under the name `patients`
-- Print the data frame called `patients` to your console
+- Save the tibble under the name `patients`
+- Print the tibble called `patients` to your console
 
 ---
 
-# Creating a data frame - solution
+# Creating a tibble - solution
 
 
 ```{r}
+# use the tidyverse modules
+library(tidyverse)
 # Creating individual vectors.
 
 name <- c("Adam", "Sally", "Eve", "John", "James", "Jennifer")
@@ -336,14 +346,18 @@ age <- c(50, 25, 32, 67, 46, 19)
 gender <- c("male", "female", "female", "male", "male", "female")
 
 
-# Combining into a data frame.
+# Combining into a tibble
 
-patients <- data.frame(name, age, gender)
+patients <- tibble(
+  "name" = name,
+  "age" = age,
+  "gender" = gender
+)
 ```
 
 ---
 
-# This is the data frame.
+# This is the Tibble.
 ```{r, echo=FALSE}
 DT::datatable(
   patients,
@@ -351,18 +365,18 @@ DT::datatable(
 )
 ```
 
-- R arranges the vectors as columns in the data frame
-- R names the columns of the data frame after the names of the vectors
-- R numbers each row of the data frame
+- R arranges the vectors as columns in the tibbles
+- R names the columns of the tibble after the names of the vectors
+- R numbers each row of the tibble
 
 ---
 
 
 
-# Recalling a vector in a data frame
-- Data frame columns are vectors.
-- `$` can be used to extract a vector from a data frame.
-- We can get the `age` column from the data frame `group`
+# Recalling a vector in a tibble
+- Tibble columns are vectors.
+- `$` can be used to extract a vector from a tibble.
+- We can get the `age` column from the tibble `group`
 ```{r}
 patients$age
 ```
@@ -427,20 +441,21 @@ str(test2)
 
 # Functions
 - You have been using functions already!
-- `data.frame()` is a function.
-- `age, gender, weight` are arguments.
+- `tibble()` is a function.
+- `age, gender, gender` are arguments.
 
-```{r}
-data.frame(name, age, gender)
+```{r, eval=FALSE}
+tibble("name" = name, 
+       "age" = age, 
+       "gender"= gender)
 ```
 
-- The data frame is the output
+- The tibble is the output
 
 ---
 
 # Try these functions yourself. What do they do?
 
-- Use the `group` data frame as the argument.
 - `head()`
 - `tail()`
 - `summary()`
@@ -461,7 +476,7 @@ data.frame(name, age, gender)
 - Functions are carrying out pre-written instructions
 - They will fail if they are supplied with the wrong kind of data - they will return an error message instead
     - or worse, process the information silently producing a result that could be meaningless
-- Try `mean(group$gender)`
+- Try `mean(patient$gender)`
 - There are other constraints
 - Dependent on the function itself
 - *HINT*: some functions will not work with missing values
