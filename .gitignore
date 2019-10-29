@@ -14,3 +14,13 @@ _site
 *.Rproj
 # added tmp directory for local changes
 tmp/*
+
+# auto-build files created from Rmd
+
+_episodes/00-carpentry-example.md
+_episodes/01-introduction.md
+_episodes/02-excel-hell.md
+_episodes/03-getting-data-into-r.md
+_episodes/04-wrangling.md
+_episodes/05-lesson-data-viz.md
+_episodes/06-just-enough-statistics.md
