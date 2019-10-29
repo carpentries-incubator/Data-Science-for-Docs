@@ -170,7 +170,7 @@ include_graphics("./images/filter.png")
 
 ---
 
-A similar function called `select` acts over columns. Just want the `sex` colum?
+A similar function called `select` acts over columns. Just want the `sex` column?
 
 ```{r}
 select(df, sex)
@@ -243,7 +243,7 @@ my_data <- data %>%
   then_this() %>%
   and_this()
 ```
-This gets saved, but doens't print anything
+This gets saved, but doesn't print anything
 ]
 
 .pull-right[
@@ -343,7 +343,7 @@ df %>%
 ```
 
 - On it's own, `group_by()` doesn't really accomplish anything particularly useful.
-- The utility is apparant when we combine with a summary function (like we did with `tally()`)
+- The utility is apparent when we combine with a summary function (like we did with `tally()`)
 
 ---
 
