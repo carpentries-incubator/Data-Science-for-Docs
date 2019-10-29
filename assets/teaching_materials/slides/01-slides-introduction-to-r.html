@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Introduction to R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ahmed Al-Hindawi &amp; Steve Harris" />
+    <meta name="date" content="2019-10-29" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="libs/jquery-1.12.4/jquery.min.js"></script>
+    <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="libs/datatables-binding-0.9/datatables.js"></script>
+    <link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+    <link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to R
+### Ahmed Al-Hindawi &amp; Steve Harris
+### The DataSciBC
+### 2019-10-29
+
+---
+
+
+
+```
+## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.2.0     ✔ purrr   0.3.2
+## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
+## ✔ tidyr   0.8.3     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+# Disclaimer
+
+- Much of the following material can be sourced from open access resources
+    - Software Carpentry
+    - Stack Overflow
+
+- Initially collated by members of the DataSciBC (www.datascibc.org)
+
+---
+
+# Content
+
+- Motivation for R: what and why?
+- R studio: a tour
+- R building blocks
+- Using functions 
+- Using packages
+
+---
+
+# What is R?
+
+- Free software for statistical computing and plotting
+- Works with variety of platforms
+    - UNIX
+    - MacOS
+    - Windows
+- Built around handling data. 'Understands' data.
+    - Particularly well suited to data science / statistics
+    
+---
+
+
+# Why use R?
+
+- Why not?
+    - Need to learn a new language
+    - Does not use 'point and click'
+    - Need to describe to the computer the steps you want it to take
+- Why?
+    - You can do *anything*
+    - Not limited to the pre-designed command process of an app.
+    - You record everything you do, so you can do it again.
+    
+---
+
+
+# Really, why R?
+
+- Save time
+    - Small upfront investment for long term gain
+    - New data? - Easy
+    - Repeat analysis? - Easy
+    - Found an error? - Easy
+- Reproducible Science
+    - Code makes your analysis explicit
+    - Writing code = writing lab-book = good reproducible science
+
+---
+
+
+
+# Working with RStudio 
+
+- RStudio is an Integrated Development Environment.
+- Easier to work with than R on it's own
+- Allows
+    - Code editing
+    - Syntax highlighting
+    - Plotting tools
+    - Workspace management 
+    
+---
+
+class: center
+
+# This is what RStudio looks like
+&lt;img src="images/rstudio_windows_vanilla.jpeg" height="500" /&gt;
+---
+
+class: center
+
+# RStudio is made up of windows
+&lt;img src="images/rstudio_highlighted_sections.png" height="500" /&gt;
+
+---
+
+# Using the console
+
+- Bottom left window.
+- This is R!
+- This is your prompt to type  `&gt;`.
+- Type `2 + 2` then hit `Enter`.
+
+---
+
+
+# Console output
+
+You should see:
+
+
+```r
+2 + 2
+```
+
+```
+## [1] 4
+```
+
+-  `&gt;` is the command prompt
+-  `2 + 2` is the command
+-  `4` is the output from R.
+-  `[1]` is telling you that 4 is the first value in a sequence returned by R.
+
+---
+
+
+# Using the Source
+
+- Type `2 + 2`, then `Enter`.
+- What happens?
+- To ask R to run code
+
+- Highlight the code and:
+    - MacOS: `Cmd + Enter`
+    - Windows: `Ctrl + Enter`
+
+- Notice the output in the console.
+
+---
+
+# Saving your work
+
+- Click the `save` icon 
+    - Save the file under a meaningful name. 
+    - Save it somewhere you can find it again.
+    - .R is the file extension for R scripts.
+- Close the Source window
+- Close R Studio
+- Restart R Studio and click the `open` icon
+- Find your file and open
+- Your code still there
+- You can run it again.
+
+---
+
+# R building blocks
+
+- Variables
+- Data
+    - Vectors
+    - Tibbles
+- Functions
+    - Stored in packages
+
+---
+
+# 3 Main Building Blocks
+
+- Variables
+    - Everything is a variable in R: tables, plots, data files; all require to be *named*
+- Data
+    - Data comes in different forms: Real Numbers/Counting Numbers/Characters etc.
+    - Data is stored in vectors
+    - Vectors are stored in tibbles
+- Functions
+    - Little factories
+    - Take an input (raw material) use function (factory) get an output (product)
+    - Functions are collated into packages
+
+---
+
+# Variables
+
+- You assign variables to "things"/objects in R.
+- This is the assignment operator `&lt;-`
+- Shortcut:
+    - Mac OSX: `Option + - `
+    - Windows: `Alt + - `
+- Return the stored value by typing the name.
+
+
+```r
+practice &lt;- 2 + 2 + 6
+```
+
+```
+## [1] 10
+```
+
+---
+
+
+# Variables
+
+- You can store any object under a name.
+- This example stores a string. You need to use quote marks to assign it.
+
+
+```r
+say_hello &lt;- "hello"
+say_hello
+```
+
+```
+## [1] "hello"
+```
+
+- Note that R does not like spaces in names.
+
+```r
+say hello &lt;- "hello"
+```
+
+```
+## Error: &lt;text&gt;:1:5: unexpected symbol
+## 1: say hello
+##         ^
+```
+
+---
+
+# Data
+- R is a statistical computing language
+- It is built around an understanding of data
+- Statistics uses:
+    - Vectors
+    - Tibbles
+
+---
+
+
+# Vectors
+
+- A vector contains elements of the **same** datatype.
+    - A vector of integers - e.g. age
+    
+    ```r
+    c(50, 25, 32, 67, 46, 19, 48)
+    ```
+    - A vector of real numbers - e.g. temperature.
+    
+    ```r
+    c(37.5, 37.1, 37.3, 38.3, 37.4, 38.9)
+    ```
+    - A vector of characters - e.g. patient's name.
+    
+    ```r
+    c("Adam", "Sally", "Eve", "John", "James")
+    ```
+    - A vector of logicals - e.g. 'are the blood results avaiblable?'
+    
+    ```r
+    c(TRUE, FALSE, FALSE, TRUE, TRUE)
+    ```
+    
+---
+
+# Naming vectors.
+
+The `c()` function **combines** individual values into a single vector.
+
+```r
+# Storing several ages in one vector.
+age &lt;- c(50, 25, 32, 67, 46, 19)
+```
+
+```
+## [1] 50 25 32 67 46 19
+```
+# Storing several names in one vector.
+
+```r
+name &lt;- c("Adam", "Sally", "Eve", "John", "James", "Jennifer")
+```
+
+```
+## [1] "Adam"     "Sally"    "Eve"      "John"     "James"    "Jennifer"
+```
+
+---
+
+# Recalling elements of a vector
+
+- R creates an index for each element of the vector.
+- It allocates a number to each element within the vector from left to right, starting with `1`.
+
+
+```r
+# The age of the second person.
+age[2]
+```
+
+```
+## [1] 25
+```
+
+```r
+# The age of the fourth person.
+age[4]
+```
+
+```
+## [1] 67
+```
+
+```r
+# The name of the fifth person.
+name[5]
+```
+
+```
+## [1] "James"
+```
+
+---
+
+# Tibbles
+- You are already familiar with tibbles
+
+
+
+- A `tibble` is a series of vectors aligned to form a table
+- Each vector becomes a column in the table
+- A *properly formatted* excel spreadsheet is essentially a tibble
+
+---
+
+# Creating a tibble - excercise
+
+- Create and name vectors containing information about these 6 patients.
+    - `Name: "Adam", "Sally", "Eve", "John", "James", "Jennifer"`
+    - `Age: 50, 25, 32, 67, 46, 19`
+    - `Gender: "male", "female", "female", "male", "male", "female"`
+- Quotation marks are not needed for names in R, but are when your data is a string e.g. "male", "female"
+- As a rule:
+    - Characters on the left side of the assignment operator. No quote marks.
+    - Characters on the right side of the assignment operator. Use quote marks if storing letters.
+
+---
+
+
+# Creating a tibble - exercise
+- Combine these vectors into a tibble using `tibble()`
+    - Hint, the vector names need to go inside the `()`
+- Save the tibble under the name `patients`
+- Print the tibble called `patients` to your console
+
+---
+
+# Creating a tibble - solution
+
+
+
+```r
+# use the tidyverse modules
+library(tidyverse)
+# Creating individual vectors.
+
+name &lt;- c("Adam", "Sally", "Eve", "John", "James", "Jennifer")
+age &lt;- c(50, 25, 32, 67, 46, 19)
+gender &lt;- c("male", "female", "female", "male", "male", "female")
+
+
+# Combining into a tibble
+
+patients &lt;- tibble(
+  "name" = name,
+  "age" = age,
+  "gender" = gender
+)
+```
+
+---
+
+# This is the Tibble.
+<div id="htmlwidget-1243fa9335bb9f716968" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1243fa9335bb9f716968">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6"],["Adam","Sally","Eve","John","James","Jennifer"],[50,25,32,67,46,19],["male","female","female","male","male","female"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>name<\/th>\n      <th>age<\/th>\n      <th>gender<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":3,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+
+- R arranges the vectors as columns in the tibbles
+- R names the columns of the tibble after the names of the vectors
+- R numbers each row of the tibble
+
+---
+
+
+
+# Recalling a vector in a tibble
+- Tibble columns are vectors.
+- `$` can be used to extract a vector from a tibble.
+- We can get the `age` column from the tibble `group`
+
+```r
+patients$age
+```
+
+```
+## [1] 50 25 32 67 46 19
+```
+
+---
+
+# Vectors - other properties
+- Add a value of TRUE to a vector of integers
+- Give it a name
+- Recall the vector
+- Use `str()` to examine the structure of the vector.
+- What has happened?
+
+---
+
+
+# Vectors - other properties
+
+
+```r
+test &lt;- c(1, 2, 3, 4, TRUE)
+str(test)
+```
+
+```
+##  num [1:5] 1 2 3 4 1
+```
+
+- The value of `TRUE` has been changed to 1.
+- The vector is still a numeric vector
+
+---
+
+
+# Vectors - other properties
+- Add a string to a vector of integers
+- Recall the vector
+- What has happened?
+
+---
+
+# Vectors - other properties
+  
+
+```r
+test2 &lt;- c(1, 2, 3, 4, "hi")
+str(test2)
+```
+
+```
+##  chr [1:5] "1" "2" "3" "4" "hi"
+```
+
+
+- The string has been added on to the end of the vector.
+- The vector is now a string vector.
+
+---
+
+# Functions
+- Sometimes taught as a "black box"
+- You can think of them as a factory
+- Usually labelled as a verb (they are "doing" something)
+- Many come built into R
+    - `Sys.time()`
+    - `mean(1:100)`
+- You can also install 'packages' containing bundles of functions
+
+- View each function as a separate separate factory in a production line
+
+---
+
+# Functions
+- You have been using functions already!
+- `tibble()` is a function.
+- `age, gender, gender` are arguments.
+
+
+```r
+tibble("name" = name, 
+       "age" = age, 
+       "gender"= gender)
+```
+
+- The tibble is the output
+
+---
+
+# Try these functions yourself. What do they do?
+
+- `head()`
+- `tail()`
+- `summary()`
+- `mean()`
+
+---
+
+# Try these functions yourself.
+
+- `head()` Gives you the first 6 rows
+- `tail()` Gives you the last 6 rows
+- `summary()` Gives an overview of the object
+- `mean()` Gives the mean of a numeric vector
+
+---
+
+# Warning note
+- Functions are carrying out pre-written instructions
+- They will fail if they are supplied with the wrong kind of data - they will return an error message instead
+    - or worse, process the information silently producing a result that could be meaningless
+- Try `mean(patient$gender)`
+- There are other constraints
+- Dependent on the function itself
+- *HINT*: some functions will not work with missing values
+    - You will then need to specify the argument to remove these missing values
+
+---
+
+# Help with functions
+- How do you find out how to use a particular function?
+- Three ways:
+    - Select the `help` tab in bottom right of RStudio, then type the function name into the search box, and read the help page.
+    - Type `?function_name` into the console.
+    - If you can’t remember the exact function name try typing `??whatever_you_want_to_do` into the console. It searches the whole database for matching terms.
+
+---
+# Explore functions yourself
+
+- Look up the function `ls`
+- What are the arguments you can give the function?
+
+    - How do you specify the argument for 'pattern'? Try it
+    - When might this be useful?
+
+    - How do you specify the argument for 'sorted'? Try it
+    - When might this be useful?
+
+
+---
+
+# Packages - collections of functions
+
+- There are bunch of functions that come with R. 
+    - They are 'base R' functions.
+- Thousands of open access functions in other packages.
+- To access these: install the packages, then load them.
+
+- Let's install and then load the 'tidyverse' package:
+
+```r
+install.packages("tidyverse")
+library(tidyverse)
+```
+- You can now use all of the functions that come with 'tidyverse'.
+
+- You need to load the package using `library` each time you open R. But you will not need to install it again.
+
+
+---
+
+# Other useful packages
+
+These are some packages we will be user later in the course.
+
+- `ggplot2` - plots graphs in R
+- `readr` - imports data into R
+- `stringr` - helps you manipulate strings
+- `lubridate` - helps you manipulate dates
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

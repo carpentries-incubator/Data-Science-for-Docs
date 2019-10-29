@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Just Enough Statistics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ed Palmer" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Just Enough Statistics
+## 👨‍💻
+### Ed Palmer
+### The DataSciBC
+### 2019/10/25 (updated: 2019-10-29)
+
+---
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 26px;
+}
+&lt;/style&gt;
+
+
+
+## What we will cover
+
+- Descriptive Statistics - Describing your data
+- Pitfalls of Inference - Power, P values and Confidence Intervals
+
+
+- Focus on visual intuitions
+- (Almost) no maths
+
+---
+
+## Learning Objectives
+
+By the end of the session you should be able to:
+
+- Describe your data more effectively.
+- Use basic statistics terminology correctly.
+- Understand statistical power, p values and confidence intervals.
+- Know where to go next for help.
+
+
+Please *bear with me* if this feels simplistic.
+
+---
+
+class: inverse, center, middle
+
+# What is statistics?
+
+
+---
+
+# What is statistics?
+
+Statistics is the discipline that concerns the *collection*, *organization*, *displaying*, *analysis*, *interpretation* and *presentation* of data
+
+Statistics is the science of learning from data
+
+--
+
+**Statistics != Hypothesis Testing**
+
+---
+
+class: inverse, center, middle
+
+# What is data science?
+
+---
+
+background-color: #586376
+
+&lt;img src="images/venn_data_science.jpeg" width="100%" /&gt;
+
+---
+
+## The Big Picture
+
+- Draw a sample from a population
+- Inspecting it, organising it, summarising it: **Descriptive statistics**
+- Draw conclusions about the population: **Inferential statistics**
+
+---
+
+class: center, bottom
+
+&lt;img src="images/stats_flow_chart.jpg" width="70%" /&gt;
+
+## How not to do statistics... 🙍
+
+---
+
+# Descriptive Statistics
+
+- How to describe the values a variable can take
+- Summarising a **distribution** into a few numbers
+
+# Measure types
+
+- Binary: yes/no e.g. is the patient alive or dead
+- Count: naturally bound at zero e.g. daily A&amp;E admissions
+- Continuous: e.g. Age, height, weight
+- Discrete
+  - Nominal: e.g. eye colour
+  - Ordinal: e.g. likert approval scale
+
+---
+
+class: inverse, center, middle
+
+# Describing Your Data
+
+## Sodium
+
+---
+
+&lt;img src="images/sodium_hist.png" width="100%" /&gt;
+
+---
+
+class: center, middle
+
+# Is this normally distributed?
+
+## If so, how should we describe this?
+
+---
+
+&lt;img src="images/sodium_hist_norm.png" width="100%" /&gt;
+
+---
+
+# Exercise (5 mins)
+
+- Have a look at potassium and id
+- What are the shapes of these variables?
+- How should we describe them?
+
+---
+
+&lt;img src="images/k_hist.png" width="100%" /&gt;
+
+---
+
+&lt;img src="images/id.png" width="100%" /&gt;
+
+---
+
+class: middle, center
+
+# Location &amp; Spread
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Normal_Distribution_PDF.svg/2000px-Normal_Distribution_PDF.svg.png" width="70%" /&gt;
+
+---
+
+class: middle, center
+
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Comparison_mean_median_mode.svg/2000px-Comparison_mean_median_mode.svg.png" width="80%" /&gt;
+
+---
+
+# Exercise (5 mins)
+
+- Try plotting histograms and calculate the mean and median for:
+  - `wbc`,
+  - `crp`,
+  - `platelets`,
+  - `hb`
+- Are the mean and median good at describing these distributions
+You can use the following functions: `mean()` and `median()`
+
+---
+
+# Descriptive stats made easy!
+
+
+```r
+df %&gt;%
+  select(wbc, crp, platelets, hb) %&gt;%
+  summary()
+```
+
+```
+##       wbc              crp           platelets           hb       
+##  Min.   : 0.000   Min.   :  0.10   Min.   :  0.0   Min.   :  5.5  
+##  1st Qu.: 8.887   1st Qu.:  9.00   1st Qu.:142.0   1st Qu.: 92.0  
+##  Median :11.800   Median : 46.00   Median :198.0   Median :108.0  
+##  Mean   :12.889   Mean   : 78.61   Mean   :220.1   Mean   :107.0  
+##  3rd Qu.:15.500   3rd Qu.:107.00   3rd Qu.:269.0   3rd Qu.:123.0  
+##  Max.   :59.300   Max.   :541.00   Max.   :989.0   Max.   :171.0
+```
+
+---
+
+- Normally distributed
+  - Mean and Standard deviation will *fully* define the shape
+- Non normally distributed
+  - Location might be better represented by median/mode
+  - Spread might be better represented by lower/upper quartiles
+
+.pull-left[
+![](07-slides-stats_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+![](07-slides-stats_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+---
+
+class: middle, center
+
+&lt;img src="./images/anscombes_quartet.png" width="80%" /&gt;
+
+---
+
+## Inferential Statistics
+
+The following core concepts are central to inferential statistics, and often misunderstood:
+- Power
+- P values
+- Confidence intervals.
+
+**All** of these are *frequency* statistics. They have long running properties that are guaranteed.
+
+---
+
+class: middle, center, inverse
+
+# Time to simulate
+
+---
+
+# Simulation
+
+- 8 men with height 1.75 m -&gt; 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼
+- 8 women with average height 1.6 m -&gt; 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼
+
+Normally we can't possibly know the population parameters.
+With simulation we can fix these
+
+
+```r
+p_values &lt;- c()
+
+for (i in 1:1000) {
+    men &lt;- rnorm(8, 1.75, sd = 0.1)
+  women &lt;- rnorm(8, 1.60, sd = 0.1)
+  
+  t &lt;- t.test(x = men, y = women, paired = FALSE, var.equal = TRUE)
+  p_values &lt;- c(p_values, t[["p.value"]])
+}
+
+sim &lt;- tibble(
+  trial_number = 1:1000,
+  p_value = p_values)
+```
+
+---
+
+class: middle, center
+
+![](07-slides-stats_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+---
+
+class: middle, center, inverse
+
+# Power
+
+---
+
+# If you said...
+
+- 1-power is the probability of a false negative for this study
+- If the study P value &gt; 0.05 at 80% power, the chance you are in error (the chance that your ﬁnding is a false negative) is 20%
+
+# ... all wrong!
+
+---
+
+.pull-left[
+
+```
+## # A tibble: 20 x 2
+##    trial_number  p_value
+##           &lt;int&gt;    &lt;dbl&gt;
+##  1            1 0.00685 
+##  2            2 0.0175  
+##  3            3 0.00729 
+##  4            4 0.477   
+##  5            5 0.000213
+##  6            6 0.00169 
+##  7            7 0.146   
+##  8            8 0.00357 
+##  9            9 0.0253  
+## 10           10 0.00717 
+## 11           11 0.00278 
+## 12           12 0.00229 
+## 13           13 0.000118
+## 14           14 0.000487
+## 15           15 0.0175  
+## 16           16 0.00220 
+## 17           17 0.180   
+## 18           18 0.000497
+## 19           19 0.00957 
+## 20           20 0.000564
+```
+]
+
+--
+
+.pull-right[
+
+```r
+sim %&gt;%
+  group_by(
+    signficant = p_value &lt;= 0.05) %&gt;%
+  tally()
+```
+
+```
+## # A tibble: 2 x 2
+##   signficant     n
+##   &lt;lgl&gt;      &lt;int&gt;
+## 1 FALSE        190
+## 2 TRUE         810
+```
+]
+
+---
+
+class: middle, center
+
+## The power of a test (often written as a percentage) is the **pre-test probability** that the test will reject the test hypothesis at a pre-specified significance level. This significance level is usually (and arbitrarily) set to 0.05.
+
+---
+
+class: middle, center
+
+## In plain English. If I were to repeat a study 1000 times, and I have 80% power at the 0.05 significance level, *and* a true effect exists. I would expect around 800 of the experiments to have a p value &lt;= 0.05, and around 200 of the experiments to have a p value &gt; 0.05
+
+---
+
+class: middle, center
+
+# What is the probability of a true positive for *this* experiment?
+
+---
+
+class: middle, center
+
+# How can we increase the power of a study?
+
+---
+
+&lt;img src="./images/power1.png" width="100%" /&gt;
+
+---
+
+&lt;img src="./images/power_curve.png" width="100%" /&gt;
+
+---
+
+# Traps to avoid
+
+- The power is **not** a direct probability.
+- It is *not* the probability that a specific experiment performed is a true positive
+- The probability that any specific experiment is a true positive is either 1 or 0, we just don't know which.
+
+---
+
+# Statistical significance
+
+- Statistical significance is a messy topic.
+- Imagine two independent studies trying to investigate the same issue (for example, early antibiotics in sepsis):
+  - Both powered at 80%.
+  - Assume early antibiotics are beneficial
+- Then the probability that both studies will have a p value &lt;= 0.05:
+  - `\(0.8 \times 0.8 = 0.64\)`
+- The probability that one will be "positive" and the other be "negative" is:
+  - `\(2 \times 0.8 \times 0.2 = 0.32\)`
+- Perhaps we should not be so quick to point out where studies disagree, since this is somewhat expected behaviour?
+
+---
+
+class: center, middle, inverse
+
+# P Values
+
+---
+
+# If you said...
+
+The p value:
+- is the probability that the test hypothesis is true
+- is the probability that the result occurred due to chance
+- if large is evidence in favour of the test hypothesis
+- if larger than 0.05 means that there is no difference
+
+# ... all wrong!
+
+---
+
+# New Simulation
+
+New simulation. Now sampling from men and men (i.e. the same)
+
+- 8 men with height 1.75 m -&gt; 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼
+- 8 men with height 1.75 m -&gt; 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼
+
+
+
+--
+
+.pull-left[
+
+```
+## # A tibble: 2 x 2
+##   signficant     n
+##   &lt;lgl&gt;      &lt;int&gt;
+## 1 FALSE        949
+## 2 TRUE          51
+```
+]
+
+--
+
+.pull-right[
+![](07-slides-stats_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+---
+
+class: center, middle
+
+# The p value is the probability of seeing data this or more extreme, given that all your assumptions are true, and that *the null hypothesis is also true*. The p value is another hypothetical frequency probability. It is another long running measure.
+
+---
+
+# Traps to avoid
+
+- A large p value does not mean *no difference*.
+- A large p value just means that you couldn't detect a difference.
+- It simply means that the data is compatible with your model (which includes the assumption that the null hypothesis is correct)
+
+# Practical Advice
+
+- A very small p value &lt; 0.05 generally is in support of rejecting the null hypothesis (provided it isn't small because assumptions were violated)
+- A small p value 0.05 - 0.2 is unclear, and should prompt to collect more data
+
+---
+
+class: center, middle, inverse
+
+# Confidence Intervals
+
+---
+
+# If you said...
+
+- The study confidence interval has a 95% probability of containing the true effect
+- An effect size outside the 95% conﬁdence interval has been rejected
+- If two conﬁdence intervals overlap, the difference between two estimates is not signiﬁcant.
+
+# ... all wrong!
+
+---
+
+# Confidence Intervals
+
+Confidence intervals are another long running property of experiments. They are based upon the p value, and define a range of values that are compatible with the data.
+
+Back to the original simulation (100 repeats this time):
+
+- 8 men with height 1.75 m -&gt; 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼, 👨‍💼
+- 8 women with average height 1.6 m -&gt; 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼, 👩‍💼
+
+--
+
+Let's plot out the confidence interval for each experiment
+
+---
+
+&lt;img src="./images/ci1.png" width="100%" /&gt;
+
+---
+
+&lt;img src="./images/ci2.png" width="100%" /&gt;
+
+---
+
+# Confidence (Compatibility) Intervals
+
+- around 5% of our samples contain the true difference of 0.15 m.
+- Note that for each individual experiment, the chance that the confidence interval contains the true difference is either 0 or 1.
+- The midpoint of the confidence interval is no more likely than any other.
+
+
+- The confidence interval shows us a range of values that are *compatible* with your sample.
+
+---
+
+# Where to go next?
+
+## I need answers now!
+- Discovering Statistics Using R / Field
+- R for Data Science / Wickham
+
+## I have a thirst for deeper knowledge...
+- Introduction to Probability &amp; STAT 110 / Blitzstein
+- Biostatistics for Biomedical Research / Harrell
+
+## I'm clearly a Bayesian...
+- Statistical Rethinking / McElreath
+
+---
+
+# References
+
+1. Greenland S, Senn SJ, Rothman KJ, Carlin JB, Poole C, Goodman SN, et al. Statistical tests, P values, confidence intervals, and power: a guide to misinterpretations. Eur J Epidemiol. 2016 Apr;31(4):337–50. 
+
+2. Harrell F, Slaughter J. Biostatistics for Biomedical Research. 2018
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

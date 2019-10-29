@@ -1,0 +1,89 @@
+---
+title: "Introduction"
+author: "Ed Palmer & Steve Harris"
+institute: "The DataSciBC"
+date: "2019/09/17 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+synth_data <- read_csv("../../../_episodes_rmd/data/synthetic_data_clean.csv")
+```
+
+class: inverse, center, middle
+
+# Welcome
+
+---
+
+# Global Learning Objectives
+
+- Introduce a new way of handling data:
+  - Understand the importance of reproducibility
+  - Encourge the use of written code, rather than point and click
+- Leave with enough knowledge to push further independently
+
+---
+
+# Session Priorities
+
+- Ensure everyone can access RStudio Cloud
+  - Can work from your machine if you prefer
+- Introduce the course data
+
+---
+
+# Preliminaries
+
+1. Get connected to the wifi
+1. [Install Slack](https://slack.com/intl/en-gb/) or use the web interface
+  - You will have an invite to the course channel
+  - Introduce youselves on Slack
+1. Check you can login to R-Studio Cloud
+1. Pair programming: buddy up
+1. Live coding: we will code along with you
+
+**Green stickies** up when done. **Red stickies** up if stuck!
+
+---
+
+# Introducing the Course Data
+
+- Critical Care Health Informatics Collaborative (CC-HIC)
+- Aggregated EHR data
+- 263 variables
+  - Demographics, risk, outcomes, treatment and physiology
+- Synthetically derrived sample of "5000 patients"
+- Data looks real, but it isn't
+
+---
+
+# The Tables
+
+- synthetic_data_clean.csv
+  - *1 row per patient*, and *1 column per variable*.
+  
+```{r}
+synth_data
+```
+
+# Things to Highlight
+
+- We will be starting with a "dirty" version of this data
+- Will learn how to clean it up today
+
+---
+
+# Your Data
+
+- We encourage you to bring along your own data
+- Try out some of the exercises on your own data
+- Feel free to approach us during the next 2 days for advice on your data

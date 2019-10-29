@@ -18,6 +18,7 @@ tmp/*
 # auto-build files created from Rmd
 
 _episodes/00-carpentry-example.md
+/Gemfile.lock
 _episodes/01-introduction.md
 _episodes/02-excel-hell.md
 _episodes/03-getting-data-into-r.md

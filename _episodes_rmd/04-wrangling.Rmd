@@ -1,88 +1,64 @@
 ---
 source: Rmd
 title: "Data Wrangling"
-teaching: 10
+teaching: 45
 exercises: 2
 questions:
-- "---?"
+- "What is data wrangling?"
+- "How do we wrangle data in R?"
 objectives:
-- "---."
-- "---."
+- "Use the **tidyverse** package to build your first data pipeline"
+- "Perform basic data manipulation tasks"
+- "Inspect and summarise data"
 keypoints:
-- "---"
-- "----"
+- "The process of transforming data from a raw to more usable format"
+- "Most easily using packages from the **tidyverse**"
 ---
-## Learning Objectives
 
-By the end of this session, you should be able to:
-- Use the **tidyverse** package to build your first data pipeline.
-- [Import the data to R](#readr)
-- [Manipulate and clean the data](#dplyr)
+## Data wrangling with dplyr
 
-## Lesson
+Data wrangling is the process of reshaping data from its raw format, inta a format that is suitable for analysis. A typical goal is to make sure our data is in a "tidy" format. To [quote](https://blog.rstudio.org/2014/07/22/introducing-tidyr/) one of R's current chief architects (Hadley Wickham), tidy data is shaped such that:
 
-<a name="readr"></a>
+> Each column is a variable.
+> Each row is an observation.
 
-### Import Data
-
-For the purposes of ESICM, we have already included data in your RStudio instance. To import this into R, we simply need to run a function and that read the csv files.
-
-```{r, include = FALSE}
-# library(tidyverse)
-# long_df <- read_csv("~/_data/esicm/longitudinal-data.csv")
-# demo_df <- read_csv("~/_data/esicm/demographic-data.csv")
-```
-
-```{r, eval = FALSE}
-# library(tidyverse)
-# long_df <- read_csv("./data/longitudinal-data.csv")
-# demo_df <- read_csv("./data/demographic-data.csv")
-```
-
-We have largely done the hard work for you in creating these tables, so that they are already close to what is considered a "tidy" format. Tidy data means:
-- Each column is a variable.
-- Each row is an observation.
-
-There is more information on what constitutes tidy data at [r4ds](https://r4ds.had.co.nz/tidy-data.html). There are still a few things left to change, and we will adress these now.
-
-before doing anything else, let's examine our data. If you simply type the data frame name into the console, it will print a truncated view of the data.
+The `dplyr` package provides useful _grammar_ for simplifying data manipulation. It is not needed but makes manipulation verbose and intuitive and is highly recommended. Let's load of the package along with the rest of the tidyverse if not already done. And we can read in the synthetic cohort.
 
 ```{r}
-# long_df
-# demo_df
+library(tidyverse)
+df <- read_csv("./data/synthetic_data_clean.csv")
 ```
 
-Another very powerful way to view the data is to use the `glimpse` function
+We can inspect the data again.
 
 ```{r}
-# glimpse(long_df)
-# glimpse(demo_df)
+glimpse(df)
 ```
 
-Here you get to see all the variable names within the data frame, what data type is being used, and the first few values (as many as can fit on the screen).
-
-<a name="dplyr"></a>
-
-### Data wrangling with dplyr
-
-The `dplyr` package provides useful _grammar_ for simplifying data manipulation. It is not needed but makes manipulation verbose and intuitive and is highly recommended.
-
-First, let's _filter_ the demographic data by row
+Using our synthetic cohort, let's _filter_ the demographic data by row.
 
 ```{r}
-# filter(demo_df, height >= 180)
+filter(df, height >= 1.8)
 ```
 
-This _filters_ rows from the `demo_df` data frame where `height` is greater than or equal to `180`cm.
+This _filters_ rows from the `df` data frame where `height` is greater than or equal to `1.8` m.
 
-> **TIP:** Comparisons in R: Most of these are obvious `>` (greater than), `>=` (greater than or equal to), and similarly for `<` and `<=`.  The `!=` operator means 'not equal to'. But when we want to check if something _is_ equal to something else we _must_ use `==`. Why? Because although R prefers you to use `<-` when you name things, most programming languages use `=`, and even R expects you to use `=` when you pass values to functions. So, for a function such as `mean(x)` we are normally lazy when we write `mean(hrate)`. We should write `mean(x=hrate)`, because _inside_ the function all the work is done with the variable `x`. When we write `mean(x=hrate)` we explicitly telling R that we want it to use `hrate` in place of `x`. This is a very long winded way of saying that when you want to _test_ if one thing is equal to another then you need a different way of writing this, hence `==`.
+> **TIP:** Comparisons in R: Most of these are obvious `>` (greater than), `>=` (greater than or equal to), and similarly for `<` and `<=`.  The `!=` operator means 'not equal to'. But when we want to check if something _is_ equal to something else we _must_ use `==`. Why? Because although R prefers you to use `<-` when you name things, most programming languages use `=`, and even R expects you to use `=` when you pass values to functions. So, for a function such as `mean(x)` we are normally lazy when we write `mean(hrate)`. We should write `mean(x = hrate)`, because _inside_ the function all the work is done with the variable `x`. When we write `mean(x = hrate)` we explicitly telling R that we want it to use `hrate` in place of `x`. This is a very long winded way of saying that when you want to _test_ if one thing is equal to another then you need a different way of writing this, hence `==`.
 
 Filter **always** acts on rows, and will throw away any data that doesn't meet your request.
+
+```{r}
+include_graphics("./img/filter.png")
+```
 
 A similar function called `select` acts over columns. Just want the `sex` colum?
 
 ```{r}
-# select(demo_df, sex)
+select(df, sex)
+```
+
+```{r}
+include_graphics("./img/select.png")
 ```
 
 So `filter` chooses rows, and `select` chooses columns.
@@ -90,25 +66,25 @@ So `filter` chooses rows, and `select` chooses columns.
 Now here comes the _proper_ magic. What if you want to both filter and select?
 
 ```{r}
-# demo_df %>%
-#   filter(height >= 180) %>%
-#   select(sex)
+df %>%
+  filter(height >= 1.8) %>%
+  select(sex)
 ```
 
-The `%>%` operator is called a **pipe**, and it (surprise, surprise) _pipes_ data from one command to the next. So in plain English, the above line takes the data frame `demo_df` and pipes it into the _filter_ function, removing all patients under `65`. It then pipes the filtered data into the `select` function where only the `sex` column is retained.
+The `%>%` operator is called a **pipe**, and it (surprise, surprise) _pipes_ data from one command to the next. So in plain English, the above line takes the data frame `df` and pipes it into the _filter_ function, removing all patients under `1.8` m. It then pipes the filtered data into the `select` function where only the `sex` column is retained.
 
 The benefit of writing code like this, is that you start with your data at the top, and then each line is a single function that performs an action. The data is processed one step at a time at the bottom you get your tidy data. This is the very start of a data pipeline.
 
 > **TIP:** The order matters in a pipe! If we were to use the `select` function first, then the `filter` function would not have a `height` column to filter on.).
 
-Next, you can continue to expand your data pipeline by piping your data into another function. We might want to summarise the data. By appending the pipeline with the `table` function we can tabulate the results.
+Next, you can continue to expand your data pipeline by piping your data into another function. We might want to summarise the data. By appending the pipeline with the `group_by` and `tally` functions we can tabulate the results.
 
 ```{r}
-# Summarise
-# demo_df %>%
-#   filter(height >= 180) %>%
-#   select(sex) %>%
-#   table()
+df %>%
+  filter(height >= 1.8) %>%
+  select(sex) %>%
+  group_by(sex) %>%
+  tally()
 ```
 
 There are a small number of 'verbs' (functions) in the dplyr package that when combined allow you to complete a large number of useful data maniputations. In addition to `select`, and `filter`, you will want you to learn:
@@ -120,118 +96,147 @@ There are a small number of 'verbs' (functions) in the dplyr package that when c
 
 Armed with only these 6 functions, you can accomplish a huge amount that would be tiresome and frustrating in excel.
 
+### Arrange
+
 ```{r}
-# demo_df %>%
-#   select(height, weight, sex) %>%
-#   arrange(height)
+df %>%
+  select(height, weight, sex) %>%
+  arrange(height)
+```
+
+```{r}
+include_graphics("./img/arrange.png")
 ```
 
 Here we see an example where we select the height, weight and sex columns, and then arrange the data by the height column.
 
+### Group By and Summarise
+
+We now see an example of `group_by` and `summarise` being used together. The result is to apply the function `mean` to each group, and summarise the results. The `na.rm = TRUE` has to be added if there are missing values are present in the data. We don't have any here, but it's good to remember for your own data.
+
 ```{r}
-# demo_df %>%
-#   group_by(sex) %>%
-#   summarise(average_height = mean(height, na.rm = TRUE))
+df %>%
+  group_by(sex) %>%
+  summarise(average_height = mean(height, na.rm = TRUE))
 ```
 
-We now see an example of `group_by` and `summarise` being used together. The result is to apply the function `mean` to each group, and summarise the results. The `na.rm = TRUE` has to be added, as missing values are present in the data, and mean will otherwise not work.
+the group by function on it's own doesn't really achieve much. It creates a grouping so that a summary function can act over that grouping.
+
+### Mutate
 
 We might be interested in computing the BMI for a patient. We can do this easily by adding a new column with the `mutate` verb.
 
 ```{r}
-# demo_df %>%
-#   mutate(bmi = weight / (height/100)^2) %>%
-#   select(weight, height, bmi) %>%
-#   arrange(desc(bmi))
+df %>%
+  mutate(bmi = weight / (height/100)^2)
 ```
 
-We now create a new column called `bmi` and then present this data, ordered in reverse (so the biggest is now at the top)
+We now create a new column called `bmi`.
+
+```{r}
+include_graphics("./img/mutate.png")
+```
+
+Let's combine a few of these functions to return only the data we want to see.
+
+```{r}
+df %>%
+  mutate(bmi = weight / (height)^2) %>%
+  select(weight, height, bmi) %>%
+  arrange(desc(bmi))
+```
+
+There are many other functions in dplyr that can help with easy data maniputation. Have a look at the cheatsheet for more details.
 
 ## Data Cleaning
 
-We will now go through some common data cleaning tasks. It is better to try and do these in R, rather than ajust the underlying data in excel if possible. Some tasks are going to have to be done in excel, but the more you can do this with written instructions (and hence have written documentation) the better.
+We will now go through some common data cleaning tasks. It is better to try and do these in R, rather than adjust the underlying data in excel if possible. Some tasks are going to have to be done in excel, but the more you can do this with written instructions (and hence have written documentation) the better.
 
 ```{r}
-# names(demo_df)
+names(df)
 ```
 
-It looks like the `discharge` variable is a little ambiguously named. Let's change that so it is clear.
+Some of these variable names are too vague for my liking.
+- chemo: active or historical?
+- na: too similar to the R concept of "missing" i.e. NA
+- system: a little ambiguous
+
+We're using the `rename` function from the dplyr package, and then 'overwriting' our existing data with the renamed data. We use the format of `rename(new_name = old_name)`. Note that we are using single `=` and not double `==` because we are assigning something, not checking for equality.
+
+```{r, eval = FALSE}
+df <- df %>%
+  rename(new_name = old_name)
+```
 
 ```{r}
-# demo_df <- demo_df %>%
-#   rename(discharge_dttm = discharge)
+df <- df %>%
+  rename(chemo_6_months = chemo,
+         sodium = na,
+         organ_system = system)
 ```
 
-We're using the `rename` function from the dplyr package, and then 'overwriting' our existing data with the renamed data.
+### Exercise
+
+Use the functions you have just learnt to:
+- Find the mean apache score for survivors and non-survivors
+- Create a new column with the highest temp from temp_c and temp_nc
 
 <a name="stringr"></a>
 
-#### Wrangling strings
+## Wrangling strings
 
-#### Recipe 2: Extract numbers
+### Extract numbers
 
-If we look at the primary_adm column, we see that it is stored as a string. This is the first two codes from the ICNARC classification codes for a primary diagnosis. In reality, it is probably more use to split this code apart, and create a new column for each. We can do this with two functions from the tidyverse: `separate` and `extract_numeric`.
+The `parse_number()` function is useful when numbers have been embedded inside a character vector. We can see this in our data in the `lactate_abg` column, where the units of measure (mmol/L) have crept into the column.
 
-```{r}
-# demo_df <- demo_df %>%
-#   separate(col = primary_adm, into = c("pt_type", "organ_system"), sep = "\\.", remove = FALSE)
-# 
-# demo_df <- demo_df %>%
-#   mutate(pt_type = extract_numeric(pt_type)) %>%
-#   mutate(organ_system = extract_numeric(organ_system))
-```
-
-Now lets view the result
-
-```{r}
-# demo_df %>%
-#   select(primary_adm, pt_type, organ_system)
-```
-
-#### Recipe 4: Parsing dates
+## Parsing Dates
 
 Let's create two new columns that show us the length of stay for a patient, and their age on admission.
 
-Dates can be extremely fiddly, but fortunately, tidyverse comes to our rescue. We will need only the `dob` and `discharge_dttm` columns to do what we want. Note that all these patients are admitted on 1st Jan 2000.
+Dates can be extremely fiddly, but fortunately, tidyverse comes to our rescue. We will need only the `arrival_dttm` and `discharge_dttm` columns to do what we want.
 
 ```{r}
-# demo_df %>%
-#   select(dob, discharge_dttm) %>%
-#   glimpse()
+df <- df %>%
+  mutate(los = interval(arrival_dttm, discharge_dttm) / days(1))
+
+df %>%
+  select(los)
 ```
+
+Working with dates can be extremely difficult. Let's practice a few simple and common tasks.
+
+### Exercise
+
+Use the functions you have just learnt to:
+- Find the mean los for survivors and non-survivors
+- Calculate the age on arrival for these patients
+
+## Pivoting Data
+
+Right now we have data arranged in 1 row per admission (1 row per patient since there are no repeat admissions). This is normally called the "wide" format. We might want this in a slightly different format (the "long" or "tall" format) to answer a different type of question. This process is known as pivoting.
+
+In our data, the lactate was recorded at hours 1, 6 and 12. Really, this data needs to be stacked for easy analysis. We can achieve this with the `pivot_longer()` function
 
 ```{r}
-# library(lubridate)
-# all_admissions <- ymd_hms("2000-01-01 00:00:00")
-# 
-# demo_df <- demo_df %>%
-#   mutate(age = interval(dob, all_admissions) / years(1)) %>%
-#   mutate(los = interval(all_admissions, discharge_dttm) / days(1))
-# 
-# demo_df %>%
-#   select(age, los)
+df_long <- df %>%
+  pivot_longer(
+    cols = c("lactate_1hr", "lactate_6hr", "lactate_12hr"),
+    names_to = "lactate_time",
+    values_to = "lactate_value") %>%
+  select(id, lactate_time, lactate_value)
 ```
 
-<a name="tidyr"></a>
+To showcase why this was useful, we can draw a spagetti plot and view how the lactate changes over time. Don't worry about the plotting syntax for now, this will be covered in another talk.
 
-## Exercises
+```{r, include = FALSE}
+df_long %>%
+  filter(id %in% sample(df_long$id, 100, replace = FALSE)) %>%
+  mutate(lactate_time = factor(lactate_time, levels = c("lactate_1hr", "lactate_6hr", "lactate_12hr"), ordered = TRUE)) %>%
+  ggplot(aes(group = id, x = lactate_time, y = lactate_value)) + geom_line(alpha = 0.2) +
+  theme_classic() +
+  ylab("Lactate mmol/L") +
+  xlab("Time Lactate Measured") +
+  ggtitle("Serial Lactate Measurements")
+```
 
-Have a look at the help files for the following common functions, and see if you can work out how they work. Do you need to use some of these with your data to clean it?
-
-### Strings
-
-- `str_to_lower`
-- `str_split`
-- `str_detect`
-
-### Dates and Times
-
-- parsing (reading) dates:
-  - `ymd()`
-  - `dmy()`
-  - `mdy_hm()`, etc
-- extracting components:
-  - `second()`
-  - `minute()`
-  - `day()`
   
