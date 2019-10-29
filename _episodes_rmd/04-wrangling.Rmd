@@ -80,7 +80,7 @@ The benefit of writing code like this, is that you start with your data at the t
 Next, you can continue to expand your data pipeline by piping your data into another function. We might want to summarise the data. By appending the pipeline with the `group_by` and `tally` functions we can tabulate the results.
 
 ```{r}
-demo_df %>%
+df %>%
   filter(height >= 1.8) %>%
   select(sex) %>%
   group_by(sex) %>%
@@ -141,7 +141,7 @@ Let's combine a few of these functions to return only the data we want to see.
 
 ```{r}
 df %>%
-  mutate(bmi = weight / (height/100)^2) %>%
+  mutate(bmi = weight / (height)^2) %>%
   select(weight, height, bmi) %>%
   arrange(desc(bmi))
 ```
@@ -230,9 +230,6 @@ To showcase why this was useful, we can draw a spagetti plot and view how the la
 
 ```{r, include = FALSE}
 df_long %>%
-  pivot_longer(cols = c("lactate_1hr", "lactate_6hr", "lactate_12hr"),
-               names_to = "lactate_time", values_to = "lactate_value") %>%
-  select(id, lactate_time, lactate_value) %>%
   filter(id %in% sample(df_long$id, 100, replace = FALSE)) %>%
   mutate(lactate_time = factor(lactate_time, levels = c("lactate_1hr", "lactate_6hr", "lactate_12hr"), ordered = TRUE)) %>%
   ggplot(aes(group = id, x = lactate_time, y = lactate_value)) + geom_line(alpha = 0.2) +
