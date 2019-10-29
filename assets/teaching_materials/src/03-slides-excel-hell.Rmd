@@ -54,8 +54,8 @@ Please design an excel spreadsheet for a study of junior doctor experience with 
 # Data entry
 
 1. FY2 placing his 1st central line with a consultant in a 23F being monitored following a massive post-partum haemorrhage
-2. Consultant placing a chest drain in a ventilated and sedated 36M asthmatic with a tension pneumothorax with severe surgical emphysema as a complicaton
-3. The same FY2 replacing the original central line in example 1 above that has now become infected. The patient is now septic and on noradrenaline.
+1. Consultant placing a chest drain in a ventilated and sedated 36M asthmatic with a tension pneumothorax with severe surgical emphysema as a complicaton
+1. The same FY2 replacing the original central line in example 1 above that has now become infected. The patient is now septic and on noradrenaline.
 
 ---
 
