@@ -91,43 +91,19 @@ setwd()
 ---
 
 # Getting your work into R  
-There are 3 main methods
+There are 2 main methods
 
-1.  Point and click  
-      - Less fiddly as no need to write code   
-      - But not reproducible  
-
-2.  Using commands
+1.  Using commands
       - Better for reproducibility
       - Someone else would just have to replace the source code to run the code on their own computer  
       
-3.  Connecting to an online database or google spreadsheet 
+2.  Connecting to an online database or google spreadsheet 
     - Beyond the scope of this tutorial
     
 ---
 
-# Method 1: Point and click
 
-Click `Import Dataset` tab in the `Environment` pane  
-
-- Choose `From text (readr)`
-- Browse for your file  
-- Click on the file you wish to select  
-- Then select `Import`  
-- IF you try this you will notice there is no text in the source pane. 
-  - *This method is not reproducible.*
-- Notice the code generated?
-
----
-
-# How can I make this reproducible? 
-
-- Look for the code in the `Code Preview`
-- You can copy and paste this code into your source pane to make this step reproducible 
-
----
-
-# Method 2: Commands
+# Method 1: Commands
 - `readr` is a package containing functions to help R *read* your external files  
 - It is automatically installed with `tidyverse`  
 - Install and load the package as follows  
@@ -147,13 +123,6 @@ library(tidyverse)
 # You are saving your data in an object called "cchic"
 cchic <- read_csv("~/Downloads/synthetic_data_clean.csv")
 ```
-
-Display the contents of the data frame `cchic`.
-
-```{r, eval = FALSE}
-cchic
-```
-
 
 ---
 
