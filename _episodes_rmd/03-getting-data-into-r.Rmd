@@ -1,16 +1,16 @@
 ---
 source: Rmd
 title: "Getting Data into R"
-teaching: 50
-exercises: 9
+teaching: 30
+exercises: 10
 questions:
 - "How do I import Data into R"
 objectives:
-- Introducing the data pipeline
-- Doing a quick nose around dataframes in R
-- Get data out of your spreadsheet
-- Importing: Scripting your import (and file paths)
-- Google Sheets bonus round
+- "Introducing the data pipeline"
+- "Doing a quick nose around dataframes in R"
+- "Get data out of your spreadsheet"
+- "Google Sheets bonus round"
+- "Importing: Scripting your import (and file paths)"
 keypoints:
 - "Importing data into R using commands provides long term benefits for reproducibility"
 editor_options: 
