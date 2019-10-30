@@ -6,7 +6,7 @@ title: "Excel Hell"
 teaching: 10
 exercises: 2
 questions:
-- "---?"
+- "What is the place of a spreadsheet programme?"
 objectives:
 
 - "Learn about data types (columns)"
@@ -39,7 +39,7 @@ You need to have installed either:
 
 <a name="introduction"></a>
 
-The accompanying slides for this lesson are available [here](02-lesson-02-excel-hell-slide.html).
+The accompanying slides for this lesson are available [here](/assets/teaching_materials/slides/02-slides-excel-hell.html). You might also enjoy checking out _[janitor](http://sfirke.github.io/janitor/)_: a nice R library that tries to fix automatically what we teach below.
 
 ## Introduction
 
