@@ -37,13 +37,21 @@ editor_options:
 
 ### Introducing the data
 
-We would like to introduce the data that we will be using during the course. The Critical Care Health Informatics Collaborative (CC-HIC) is a UK research body that has aggregated data from thousands of critical care patients. We will be using an anonymised sample from this cohort.
+#### Nearly Clean Data - CC-HIC
 
-The data has been pre-prepared for us today, and will be presented as two "spread sheets" or what is called a `data frame` in `R` parlance. This is the most common format for presenting data that can be described in rows and columns (so called "rectangular data").
+The Critical Care Health Informatics Collaborative (CC-HIC) is a UK research body that has aggregated data from thousands of critical care patients. We will be using a synthetic dataset based on this cohort. These are **not** real cases, but they are made to look real.
 
-The data given contains information in a  *1 row per patient*, and *1 column per variable*.
+You can find this data inside the RStudio Cloud instance inside the `data` directory.
+
+The data given contains information as  *1 row per patient*, and *1 column per variable*.
 
 For a full description of the data that exists inside CC-HIC see [here](https://github.com/ropensci/cleanEHR/wiki/Data-set-1.0)
+
+#### Dirty Data - Breast RCT
+
+Additionally, we have another cohort from a breast RCT than randomised patients between local anaesthetic infiltration, and injected directly into a drain. Pain scores were observed following the intervention.
+
+#### Your own data
 
 You are also encourage to bring along your own data. We can't promise to spend time on this, but there are exercises to do along the way, and you might want to try these exercises out on your own work after the course. We will be around for the day, so feel free to approach us at any time and ask us for advice for your own data.
 
@@ -62,9 +70,9 @@ It is going to be helpful to have an understanding of how files and folders (com
   - On Mac and Linux, the root is similarly the highest directory level, and simply represented by `/` (a *forward slash*). We are using linux today, so this is the convention we will follow.
 - The "path" is a set of instructions to find a file on the computer.
   - Anologus to writing a postal address in reverse:
-    - Germany (most generic)
-    - Berlin
-    - CityCube (most specific)
+    - UK (most generic)
+    - London
+    - Wellcome (most specific)
   - The "path" is just the same:
     - / (check inside the root)
     - Documents/ (check for the documents folder)
@@ -95,10 +103,7 @@ View(my_file)
 And this is what it should look like:
 
 ```{r, echo=FALSE}
-DT::datatable(
-  head(my_file, 100),
-  fillContainer = TRUE, options = list(pageLength = 10)
-)
+my_file
 ```
 
 Don't worry if this doesn't all make sense at this time. It only means that you are paying attension! All will become clear over the course of the day.

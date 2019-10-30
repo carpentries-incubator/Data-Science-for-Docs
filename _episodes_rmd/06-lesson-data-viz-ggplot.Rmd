@@ -1,16 +1,16 @@
 ---
 source: Rmd
 title: "Data Viz"
-teaching: 10
-exercises: 2
+teaching: 30
+exercises: 0
 questions:
 - "---?"
 objectives:
-- "---."
-- "---."
+- "---?"
+- "---?"
 keypoints:
-- "---"
-- "----"
+- "---?"
+- "---?"
 ---
 
 ```{r setup, include=FALSE}

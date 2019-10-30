@@ -1,8 +1,8 @@
 ---
 source: Rmd
 title: "Data Wrangling"
-teaching: 45
-exercises: 2
+teaching: 50
+exercises: 10
 questions:
 - "What is data wrangling?"
 - "How do we wrangle data in R?"
