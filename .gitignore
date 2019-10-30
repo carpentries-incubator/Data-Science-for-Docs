@@ -10,6 +10,8 @@ _site
 .Rhistory
 .RData
 
+/Gemfile.lock
+
 # my Rproj
 *.Rproj
 # added tmp directory for local changes
