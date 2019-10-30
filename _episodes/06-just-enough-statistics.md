@@ -16,6 +16,7 @@ keypoints:
 - "Statistics is the science of learning from data"
 editor_options: 
   chunk_output_type: console
+graphics: yes
 ---
 
 ## Lesson
@@ -194,62 +195,62 @@ summary(df)
 ```
 
 ```
-##      ph_abg         hco3_abg         temp_c         temp_nc     
-##  Min.   :6.760   Min.   : 5.20   Min.   :25.70   Min.   :23.40  
-##  1st Qu.:7.310   1st Qu.:20.90   1st Qu.:35.90   1st Qu.:36.10  
-##  Median :7.360   Median :23.30   Median :36.30   Median :36.60  
-##  Mean   :7.355   Mean   :23.26   Mean   :36.31   Mean   :36.37  
-##  3rd Qu.:7.410   3rd Qu.:25.52   3rd Qu.:36.90   3rd Qu.:37.00  
-##  Max.   :7.620   Max.   :65.30   Max.   :39.20   Max.   :39.70  
-##                                                                 
-##       urea          creatinine           na              k        
-##  Min.   : 0.600   Min.   :  15.0   Min.   : 99.0   Min.   :2.000  
-##  1st Qu.: 4.200   1st Qu.:  64.0   1st Qu.:136.0   1st Qu.:4.000  
-##  Median : 6.100   Median :  83.0   Median :139.0   Median :4.400  
-##  Mean   : 8.212   Mean   : 129.4   Mean   :138.3   Mean   :4.456  
-##  3rd Qu.: 9.700   3rd Qu.: 123.0   3rd Qu.:141.0   3rd Qu.:4.900  
-##  Max.   :56.500   Max.   :1533.0   Max.   :164.0   Max.   :7.800  
-##                                                                   
-##        hb             wbc           neutrophil       platelets    
-##  Min.   :  5.5   Min.   : 0.000   Min.   : 0.010   Min.   :  0.0  
-##  1st Qu.: 92.0   1st Qu.: 8.887   1st Qu.: 6.895   1st Qu.:142.0  
-##  Median :108.0   Median :11.800   Median :10.000   Median :198.0  
-##  Mean   :107.0   Mean   :12.889   Mean   :10.759   Mean   :220.1  
-##  3rd Qu.:123.0   3rd Qu.:15.500   3rd Qu.:13.600   3rd Qu.:269.0  
-##  Max.   :171.0   Max.   :59.300   Max.   :56.510   Max.   :989.0  
-##                                                                   
-##       crp             chemo         chronic_rrt       metastatic    
-##  Min.   :  0.10   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
-##  1st Qu.:  9.00   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
-##  Median : 46.00   Median :0.0000   Median :0.0000   Median :0.0000  
-##  Mean   : 78.61   Mean   :0.4074   Mean   :0.2082   Mean   :0.2148  
-##  3rd Qu.:107.00   3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:0.0000  
-##  Max.   :541.00   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
-##                                                                     
-##     radiotx           apache          medical           system      
-##  Min.   :0.0000   Min.   : -1.00   Min.   :0.0000   Min.   : 1.000  
-##  1st Qu.:0.0000   1st Qu.: 11.00   1st Qu.:0.0000   1st Qu.: 2.000  
-##  Median :0.0000   Median : 15.00   Median :0.0000   Median : 2.000  
-##  Mean   :0.2168   Mean   : 19.47   Mean   :0.4916   Mean   : 3.288  
-##  3rd Qu.:0.0000   3rd Qu.: 20.00   3rd Qu.:1.0000   3rd Qu.: 4.000  
-##  Max.   :1.0000   Max.   :119.00   Max.   :1.0000   Max.   :10.000  
-##                                                                     
-##      height          weight       elective_surgical
-##  Min.   :1.450   Min.   : 50.00   Min.   :0.0000   
-##  1st Qu.:1.600   1st Qu.: 65.00   1st Qu.:0.0000   
-##  Median :1.700   Median : 75.00   Median :0.0000   
-##  Mean   :1.686   Mean   : 76.61   Mean   :0.4466   
-##  3rd Qu.:1.750   3rd Qu.: 90.00   3rd Qu.:1.0000   
-##  Max.   :1.900   Max.   :150.00   Max.   :1.0000   
-##                                                    
-##   arrival_dttm                 discharge_dttm               
-##  Min.   :2014-01-01 00:35:32   Min.   :2014-01-02 01:06:16  
-##  1st Qu.:2015-07-02 12:22:18   1st Qu.:2015-07-08 04:39:20  
-##  Median :2016-12-06 16:14:27   Median :2016-12-11 07:06:45  
-##  Mean   :2016-11-30 19:31:11   Mean   :2016-12-05 04:01:23  
-##  3rd Qu.:2018-04-30 15:20:14   3rd Qu.:2018-05-05 04:12:20  
-##  Max.   :2019-09-24 00:13:38   Max.   :2019-10-07 01:43:08  
+##      ph_abg        hco3_abg        temp_c        temp_nc    
+##  Min.   :6.76   Min.   : 5.2   Min.   :25.7   Min.   :23.4  
+##  1st Qu.:7.31   1st Qu.:20.9   1st Qu.:35.9   1st Qu.:36.1  
+##  Median :7.36   Median :23.3   Median :36.3   Median :36.6  
+##  Mean   :7.36   Mean   :23.3   Mean   :36.3   Mean   :36.4  
+##  3rd Qu.:7.41   3rd Qu.:25.5   3rd Qu.:36.9   3rd Qu.:37.0  
+##  Max.   :7.62   Max.   :65.3   Max.   :39.2   Max.   :39.7  
 ##                                                             
+##       urea        creatinine              na            k       
+##  Min.   : 0.60   Length:5000        Min.   : 99   Min.   :2.00  
+##  1st Qu.: 4.20   Class :character   1st Qu.:136   1st Qu.:4.00  
+##  Median : 6.10   Mode  :character   Median :139   Median :4.40  
+##  Mean   : 8.21                      Mean   :138   Mean   :4.46  
+##  3rd Qu.: 9.70                      3rd Qu.:141   3rd Qu.:4.90  
+##  Max.   :56.50                      Max.   :164   Max.   :7.80  
+##                                                                 
+##        hb             wbc          neutrophil      platelets  
+##  Min.   :  5.5   Min.   : 0.00   Min.   : 0.01   Min.   :  0  
+##  1st Qu.: 92.0   1st Qu.: 8.89   1st Qu.: 6.89   1st Qu.:142  
+##  Median :108.0   Median :11.80   Median :10.00   Median :198  
+##  Mean   :107.0   Mean   :12.89   Mean   :10.76   Mean   :220  
+##  3rd Qu.:123.0   3rd Qu.:15.50   3rd Qu.:13.60   3rd Qu.:269  
+##  Max.   :171.0   Max.   :59.30   Max.   :56.51   Max.   :989  
+##                                                               
+##       crp            chemo        chronic_rrt      metastatic   
+##  Min.   :  0.1   Min.   :0.000   Min.   :0.000   Min.   :0.000  
+##  1st Qu.:  9.0   1st Qu.:0.000   1st Qu.:0.000   1st Qu.:0.000  
+##  Median : 46.0   Median :0.000   Median :0.000   Median :0.000  
+##  Mean   : 78.6   Mean   :0.407   Mean   :0.208   Mean   :0.215  
+##  3rd Qu.:107.0   3rd Qu.:1.000   3rd Qu.:0.000   3rd Qu.:0.000  
+##  Max.   :541.0   Max.   :1.000   Max.   :1.000   Max.   :1.000  
+##                                                                 
+##     radiotx          apache         medical          system     
+##  Min.   :0.000   Min.   : -1.0   Min.   :0.000   Min.   : 1.00  
+##  1st Qu.:0.000   1st Qu.: 11.0   1st Qu.:0.000   1st Qu.: 2.00  
+##  Median :0.000   Median : 15.0   Median :0.000   Median : 2.00  
+##  Mean   :0.217   Mean   : 19.5   Mean   :0.492   Mean   : 3.29  
+##  3rd Qu.:0.000   3rd Qu.: 20.0   3rd Qu.:1.000   3rd Qu.: 4.00  
+##  Max.   :1.000   Max.   :119.0   Max.   :1.000   Max.   :10.00  
+##                                                                 
+##      height         weight      elective_surgical
+##  Min.   :1.45   Min.   : 50.0   Min.   :0.000    
+##  1st Qu.:1.60   1st Qu.: 65.0   1st Qu.:0.000    
+##  Median :1.70   Median : 75.0   Median :0.000    
+##  Mean   :1.69   Mean   : 76.6   Mean   :0.447    
+##  3rd Qu.:1.75   3rd Qu.: 90.0   3rd Qu.:1.000    
+##  Max.   :1.90   Max.   :150.0   Max.   :1.000    
+##                                                  
+##   arrival_dttm                    discharge_dttm                  
+##  Min.   :2014-01-01 00:35:32.00   Min.   :2014-01-02 01:06:16.00  
+##  1st Qu.:2015-07-02 12:22:18.25   1st Qu.:2015-07-08 04:39:20.00  
+##  Median :2016-12-06 16:14:27.00   Median :2016-12-11 07:06:45.50  
+##  Mean   :2016-11-30 19:31:11.50   Mean   :2016-12-05 04:01:23.01  
+##  3rd Qu.:2018-04-30 15:20:14.25   3rd Qu.:2018-05-05 04:12:20.50  
+##  Max.   :2019-09-24 00:13:38.00   Max.   :2019-10-07 01:43:08.00  
+##                                                                   
 ##       dob             vital_status           sex           
 ##  Min.   :1934-01-01   Length:5000        Length:5000       
 ##  1st Qu.:1944-03-26   Class :character   Class :character  
@@ -258,29 +259,29 @@ summary(df)
 ##  3rd Qu.:1968-01-02                                        
 ##  Max.   :1999-09-22                                        
 ##  NA's   :1                                                 
-##       id             lactate_1hr      lactate_6hr        lactate_12hr     
-##  Length:5000        Min.   : 0.200   Min.   : 0.08116   Min.   : 0.01097  
-##  Class :character   1st Qu.: 1.100   1st Qu.: 0.81739   1st Qu.: 0.49236  
-##  Mode  :character   Median : 1.500   Median : 1.27472   Median : 0.91205  
-##                     Mean   : 2.074   Mean   : 1.80436   Mean   : 1.37313  
-##                     3rd Qu.: 2.300   3rd Qu.: 2.04677   3rd Qu.: 1.64780  
-##                     Max.   :17.900   Max.   :17.91843   Max.   :17.79850  
-##                                                                           
-##       los              age       
-##  Min.   : 0.000   Min.   :20.00  
-##  1st Qu.: 1.000   1st Qu.:50.00  
-##  Median : 3.000   Median :60.00  
-##  Mean   : 4.354   Mean   :60.27  
-##  3rd Qu.: 5.000   3rd Qu.:70.00  
-##  Max.   :31.000   Max.   :80.00  
-##                   NA's   :1
+##       id             lactate_1hr     lactate_6hr    lactate_12hr  
+##  Length:5000        Min.   : 0.20   Min.   : 0.1   Min.   : 0.00  
+##  Class :character   1st Qu.: 1.10   1st Qu.: 0.8   1st Qu.: 0.50  
+##  Mode  :character   Median : 1.50   Median : 1.3   Median : 0.90  
+##                     Mean   : 2.07   Mean   : 1.8   Mean   : 1.38  
+##                     3rd Qu.: 2.30   3rd Qu.: 2.0   3rd Qu.: 1.60  
+##                     Max.   :17.90   Max.   :20.7   Max.   :21.40  
+##                                                                   
+##       los             age      
+##  Min.   : 0.00   Min.   :20.0  
+##  1st Qu.: 1.00   1st Qu.:50.0  
+##  Median : 3.00   Median :60.0  
+##  Mean   : 4.35   Mean   :60.3  
+##  3rd Qu.: 5.00   3rd Qu.:70.0  
+##  Max.   :31.00   Max.   :80.0  
+##                  NA's   :1
 ```
 
 It is important to always plot your data, as these summary terms seldom fully describe your data. See the example below. The data points presented all share the same mean, standard distribution and correlation.
 
 
 ```r
-include_graphics("./img/anscombes_quartet.png")
+knitr::include_graphics("./img/anscombes_quartet.png")
 ```
 
 ![plot of chunk unnamed-chunk-6](./img/anscombes_quartet.png)

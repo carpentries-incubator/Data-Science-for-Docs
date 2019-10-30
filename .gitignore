@@ -17,7 +17,3 @@ _site
 # added tmp directory for local changes
 tmp/*
 
-_episodes/03-getting-data-into-r.md
-_episodes/04-wrangling.md
-_episodes/05-lesson-data-viz.md
-_episodes/06-just-enough-statistics.md
