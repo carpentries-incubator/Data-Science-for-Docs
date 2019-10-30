@@ -1,0 +1,29 @@
+---
+source: Rmd
+title: "Data Viz Theory"
+teaching: 10
+exercises: 0
+questions:
+- "---?"
+objectives:
+- "---."
+- "---."
+keypoints:
+- "---"
+- "----"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+# Content
+
+- What is data visualisation?
+- Exploring data
+- Storytelling
+- Some notes on use of colour
+
+# Lecture slides
+
+See the lecture slides [here](../fig/data_visualisation_theory_slides.pdf)
