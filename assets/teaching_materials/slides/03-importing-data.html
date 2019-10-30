@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Getting Data into R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ahmed Al-Hindawi" />
+    <meta name="date" content="2019-10-29" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Getting Data into R
+### Ahmed Al-Hindawi
+### The DataSciBC
+### 2019-10-29
+
+---
+
+
+
+
+
+# What will this workshop teach you?
+
+1.  Getting `csv` files into R  
+2.  Initial exploration of your data set  
+
+---
+
+# Introduction
+- You have now learnt to input data into R manually  
+- But what happens if you are given an Excel spreadsheet and told to analyse it?  
+  - How can you look at and work with that data in R?
+  
+---
+
+  
+# What is a CSV file?
+- *Comma separated values* file  
+- You still have columns and rows       
+- But data values on a single row are separated by *commas* instead of walls of a cell  
+- Excel spreadsheets are easily converted into this format
+
+---
+
+# Time Out
+
+- Take a moment to downlaod the practise data set
+- Available in `csv` format   
+  - from the slack channel  
+  - Open and `Save As` a `.csv` file
+
+---
+
+# Files, Directories and File Paths
+- R can not read your data if it does not know where it is stored  
+- Your computer has a system for storing files within directories 
+- Directories are also known as folders  
+- The language used to instruct on the location of the file in known as the `file path` 
+
+---
+
+
+# File Paths
+
+- Starts with a `Root Directory` and then `Branches` are specified
+- You can find out the file path name by right clicking on any file
+  - `Properties` in Windows
+  - `Get Info` in Mac  
+- Folders within directories are specified with:
+  - / in Mac  
+  - \\ in Windows
+- However, the correct notation in R for both is /
+
+---
+
+# Working Directory
+
+- R would have chosen a working directory for you  
+
+
+```r
+getwd()
+```
+
+- Will display your working directory in your console  
+- You can then reset it to your desired working directory using 
+
+
+```r
+setwd()
+```
+
+---
+
+# Getting your work into R  
+There are 2 main methods
+
+1.  Using commands
+      - Better for reproducibility
+      - Someone else would just have to replace the source code to run the code on their own computer  
+      
+2.  Connecting to an online database or google spreadsheet 
+    - Beyond the scope of this tutorial
+    
+---
+
+
+# Method 1: Commands
+- `readr` is a package containing functions to help R *read* your external files  
+- It is automatically installed with `tidyverse`  
+- Install and load the package as follows  
+
+
+```r
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+---
+
+# Read your file
+
+- You can then tell R to read a CSV file by writing the full file path name. This is an example file path, but what you need to type depends on where you stored the data on your computer. 
+
+
+```r
+# You are saving your data in an object called "cchic"
+cchic &lt;- read_csv("~/Downloads/synthetic_data_clean.csv")
+```
+
+---
+
+# Tibble
+
+A `tibble` is a specially formatted data frame. Your data has been imported in this format.
+
+## Viewing Your Data in R
+
+- You have imported your data into R.
+- You need a neat way of looking at it. 
+
+
+```r
+View(cchic)
+```
+
+- The data is displayed in a familiar spreadsheet format. 
+  - This is a more human-legible table  
+  - You can also view the data via the environment pane
+
+---
+
+# Shortcuts
+
+- There are notations to shorten the code for the file path  
+- Use single dot for a file within current working directory
+
+```r
+read_csv("./clean_CCHIC.csv")
+```
+
+- Use double dot `..` for a file in the directory above the current working directory
+
+---
+
+# Reviewing your data in R
+
+Spreadsheets in R are called data frames 
+You can use these functions to investigate your data frame: 
+
+- `head(cchic)`  
+- `tail(cchic)`  
+- `names(cchic)`  
+- `str(cchic)`  
+      
+---
+
+# head()
+
+
+```r
+head(cchic)
+```
+
+Prints the first few rows of the data frame.
+
+---
+
+# tail()
+
+
+```r
+tail(cchic)
+```
+
+Prints the last few rows of the data frame.
+
+---
+
+# names()
+
+
+```r
+names(cchic)
+```
+
+Prints the names of the variables. 
+
+---
+
+# str()
+
+
+```r
+str(cchic)
+```
+
+Prints the data type of each variable.
+
+---
+
+# Look at specific items.
+
+You can look at specific data points.
+
+
+```r
+cchic[21, 5]
+```
+
+```
+## # A tibble: 1 x 1
+##    urea
+##   &lt;dbl&gt;
+## 1  10.1
+```
+
+This displays the the piece of data in the 21st row and 5th column.
+
+---
+
+# Selecting variables using $ sign.
+
+- You can also use the `$` function
+- Enter `data_frame_name$variable_name`
+
+
+```r
+cchic$weight
+```
+
+- This will list all of the data in the weight column
+
+---
+
+# Other tools to review data
+
+- Specific functions from special packages help you describe the whole data set
+- The function will look at each variable and will give you basic measures about the data, for example range and mean.
+- The data will also be described in a number of plots.
+  - `Desc()` from `DescTools` package
+  - `Describe()` from `Hmisc` package  
+- To use these you have to install the appropriate packages
+
+---
+
+# Exercise
+1. What types of variables do you have in `cchic`?
+2. Display the `elective_surgical` vector from in `cchic`.
+3. How many men and women are in the database?
+4. How many survived and how many died?
+5. a) What does the function `ls()` do? 
+   b) Use it to see how many vectors contain information about "temp"
+  
+---
+
+# Answer 1.
+What types of variables do you have in `cchic`?
+
+
+```r
+str(cchic)
+```
+
+---
+
+# Answer 2
+Display the `elective_surgical` vector in `cchic`.
+
+```r
+cchic$elective_surgical
+```
+
+---
+
+# Answer 3
+How many men and women are in the database?
+
+```r
+table(cchic$sex)
+```
+
+```
+## 
+##    F    M 
+## 2246 2754
+```
+
+---
+
+# Answer 4
+How many survived and how many died?
+
+```r
+table(cchic$vital_status)
+```
+
+```
+## 
+##    A    D 
+## 4444  556
+```
+
+---
+
+# Answer 5
+What does the function `ls()` do?
+
+```r
+ls(cchic, pattern = "temp")
+```
+
+```
+## [1] "temp_c"  "temp_nc"
+```
+
+This lists all of the variables containing the word "temp".
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

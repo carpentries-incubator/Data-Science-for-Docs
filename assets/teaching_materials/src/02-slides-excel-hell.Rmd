@@ -13,12 +13,21 @@ output:
       countIncrementalSlides: false
 ---
 
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+synth_data <- read_csv("../../../_episodes_rmd/data/synthetic_data_clean.csv")
+```
+
+
 # Learning Objectives
 
 - Learn about data types (columns)
 - Spreadsheets <> Data (Rows <> Observations)
 - Best practices for recording data
 - Common mistakes
+
 
 ## Outline
 
@@ -98,10 +107,14 @@ Please design an excel spreadsheet for a study of junior doctor experience with 
     - milliseconds since 1960 (Stata)
     - Days since January 0 1900 (Excel!)
 
+---
 
 ## Date gotcha's
 
-![](images/excel-dates.png)
+
+```{r, echo=FALSE }
+knitr::include_graphics("images/excel-dates.png")
+```
 
 ---
 
