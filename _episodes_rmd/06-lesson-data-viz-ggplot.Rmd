@@ -1,6 +1,6 @@
 ---
 source: Rmd
-title: "Data Viz"
+title: "Introduction to ggplot2"
 teaching: 30
 exercises: 0
 questions:
@@ -22,73 +22,91 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 By the end of this session, you should be able to:
 
 - Use the **ggplot2** package to create your first plot
-- Consider the most appropraite plot to display your data
 - Understand how to use layers in ggplot2
-- Know where to go to find out which aesthetic or geom to use
+- Be familiar with a few different methods for visualising continuous and discrete variables
+- Be able to create subplots (facets) with ggplot2
+- Be aware of some strategies for dealing with overplotted data
+
+
 
 # Introduction
 
-In this session, we will show you some examples of how to build a plot with the **ggplot2** package. We will be looking at:
-
-- scatter plots
-- histograms and density plots
-- box plots
-- facetted charts
-- maps
-
-The ggplot2 package implements a "layered grammar of graphics" where data visualisation is divided into layers. This is principlally based on Edward Tufte's work. He is a professor emeritus at Yale University, statistician and all-round godfather of data visualisation.
+In this session, we will show you some examples of how to build a plot with the **ggplot2** package. The ggplot2 package implements a "layered grammar of graphics" where data visualisation is divided into layers.
 
 The layers that you will need to "build up" to form a plot include:
 
-1. the data you want to visualise (e.g. heights and weights).
-1. an aesthetic mapping to represent variables (e.g. map height to the y-axis, map weight to the x-axis).
-1. a geometric way to represent the information (e.g. display with a point).
-1. a coordinate system (e.g. use a standard cartesian axis).
+- The data you want to visualise (e.g. heights and weights).
+- An aesthetic mapping to represent variables (e.g. map height to the y-axis, map weight to the x-axis).
+- A geometric way to represent the information (e.g. display with a point).
 
-First, let's load the packages that we will be using into memory.
+
+
+# Load ggplot2
+
+First, let's load ggplot2 into memory.
 
 ```{r}
-library(tidyverse) # contains ggplot2
-library(viridis)
-library(maps)
-library(RColorBrewer)
+library(tidyverse)  # contains ggplot2
 ```
 
-Viridis is a great package that provides colour maps that are perceptually uniform in both colour and black-and-white. They are also designed to be perceived by viewers with common forms of colour blindness.
 
-Maps allows you to plot maps of regions of the world
 
 # Import data
 
+We specify the type of the categorical variables to stop them being interpreted as text or numbers. This will make plotting easier later.
+
+```{r}
+df <- read_csv('data/synthetic_data_clean.csv',
+               col_types = cols(
+                 chemo = col_factor(),
+                 chronic_rrt = col_factor(),
+                 metastatic = col_factor(),
+                 radiotx = col_factor(),
+                 medical = col_factor(),
+                 vital_status = col_factor(),
+                 sex = col_factor(),
+                 elective_surgical = col_factor(),
+                 system = col_factor(ordered=TRUE,
+                                     levels=as.character(1:10))
+               ))
+```
+
+
+
+# Generic structure of ggplot commands
+
+It takes a while to get used to the structure, but it's worth the effort!
+
 ```{r, eval = FALSE}
-# long_df <- read_csv("./data/longitudinal-data.csv")
-# demo_df <- read_csv("./data/demographic-data.csv")
+ggplot(data = date_frame_name) +
+  style_of_plot(mapping = aes(x = vector_name1, y = vector_name2)) +
+  other_arguments
 ```
 
-We will also pull in some other data to help with the visualisations. And perorm a join between our two datasets so they are all in one place.
 
-```{r, eval=F}
-long_demo <- left_join(long_df, demo_df, by = "episode_id")
-postcodes <- read_csv(file = "../../static/ggpostcodes.csv")
-UK <- map_data(map = "world", region = "UK")
+
+# Your first plot
+
+A scatter plot is a useful way to represent two continuous variables, and spot any correlations between the variables. We'll plot CRP against neutrophil count.
+
+```{r}
+ggplot(data = df) + geom_point(mapping = aes(x = crp, y = neutrophil))
 ```
 
-# Data fields
-
-Check our available fields.
+And here's the same command, written more succinctly:
 
 ```{r, eval=F}
-names(long_df)
-names(demo_df)
-names(long_demo) 
+ggplot(df) + geom_point(aes(crp, neutrophil))
 ```
 
-# Scatter Plots
 
-A scatter plot is a useful way to represent two continuous variables. Correlations between the variables are highlighted. Oberserve how the plot is built up layer by layer, starting with the data, and moving to the aesthetics and then geoms.
 
-```{r, eval=F}
-ggplot(data = demo_df) +
+# Building a plot up, layer by layer
+
+Observe how the plot is built up layer by layer, starting with the data, and moving to the aesthetics and then geoms.
+
+```{r}
+ggplot(data = df) +
   aes(x = weight) +
   aes(y = height) +
   geom_point() +
@@ -103,106 +121,153 @@ ggplot(data = demo_df) +
   theme(legend.title = element_blank()) 
 ```
 
+
+
 # Histograms
 
 Histograms are useful for displaying counts of continuous data. Here we use the argument `binwidth = 1` which tells the histogram to count the number of PaO2 samples in "bins" of 1. i.e. 0-1, 1-2, 2-3 kPa and so on...
 
 The representation is very sensitive to the bind width. Try changing it and see what happens.
 
-```{r, eval=F}
-ggplot(data = long_df) +
-  aes(x = pao2_abg) +
+```{r}
+ggplot(data = df) +
+  aes(x = lactate_1hr) +
   geom_histogram (binwidth = 1, fill ="grey",col = "black") +
-  ggtitle("Arterial PaO2") +
-  xlab("PaO2") +
-  theme_minimal() 
-```
-
-# Density Plots
-
-Density plots (or probability density functions to give their grand title) are anologus to histograms. Rather than binning the data, everythign is smoothed. Just like histograms, they are sensitive to how this data is smoothed. This can be adjusted with the `bw` arugment (which stands for "bandwidth").
-
-```{r, eval=F}
-ggplot(data = long_df) +
-  aes(x = pao2_abg) +
-  geom_density(fill ="grey",
-               colour = "black") +
-  ggtitle("Arterial PaO2") +
-  xlab("PaO2") +
+  ggtitle("Arterial lactate (hour 1 of admission)") +
+  xlab("Lactate") +
   theme_minimal()
 ```
 
-# Box-and-Whisker Plots
 
-Before plotting Neutrophil Count grouped by previous Chemotherapy need to check data format
 
-Box and whisker plots are useful for displaying continuous data that has a natural discrete grouping. Like the heights of men and women. Let's look at something more interesting however. What about the neutrophil counts of those who are or are not on chemotherapy.
+# Density Plots
 
-First, we need to inspect the chemotherapy variable, and modify it from a numeric value (0, 1) to a categorical value (a factor)
+Density plots are analogous to histograms. Rather than binning the data, everything is smoothed. Just like histograms, they are sensitive to how this data this smoothing occurs. This can be adjusted with the `bw` argument (which stands for "bandwidth").
 
-```{r,eval=F}
-class(long_demo$chemo)
-class(long_demo$neutrophil)
-
-long_demo <- long_demo %>% 
-  mutate(chemo = as.factor(chemo))
+```{r}
+ggplot(data = df) +
+  aes(x = lactate_1hr) +
+  geom_density(fill ="grey",
+               colour = "black") +
+  ggtitle("Arterial PaO2") +
+  ggtitle("Arterial lactate (hour 1 of admission)") +
+  xlab("Lactate") +
+  theme_minimal()
 ```
 
-Now we can make the resulting plot.
 
-```{r, eval=F}
-ggplot(data = long_demo) +
-  aes(x = chemo) +
-  aes(y = neutrophil) +
-  aes(colour = chemo) +
-  geom_boxplot() +
-  xlab("Chemotherapy")+
-  ylab("Neutrophil") +
-  ggtitle("Chemotherapy and Neutrophil Count") +
-  theme_light() +
-  theme(legend.position = "none")
+# Other ways of visualising continuous variables
+
+We can use box and whisker plots to visualise the median, IQR and range of 1-hour lactates in patients who were alive or dead at discharge:
+
+```{r}
+ggplot(df) + geom_boxplot(aes(vital_status, lactate_1hr))
 ```
+
+Or use a violin plot to get more of an insight into the how the lactates are distributed in those 2 groups. Remember that (like the density plots we looked at earlier) the violins are smoothed estimates. 
+
+```{r}
+ggplot(df) + geom_violin(aes(vital_status, lactate_1hr))
+```
+
+
+
+# A pipeline for exploratory analysis
+
+We can chain together commands (using the pipe operator) from different bits of tidyverse to enable exploratory analysis:
+
+```{r}
+df %>% 
+  filter(urea < 2) %>% 
+  ggplot() +
+  geom_point(aes(na, k))
+```
+
+
 
 # Faceting Plots
 
-Sometimes you might wish to encode information across multiple plots. This is the role of faceting. Here we see an example using steroids.
+Sometimes you might wish to encode information across multiple plots. This is the role of faceting. Here, we visualise the distributions of sodium levels in male and female patients. 
 
-```{r, eval=F}
-ggplot(data = long_demo) +
-  aes(y = fluid_balance) +
-  aes(x = pao2_abg) +
-  geom_point(alpha = 0.5) +
-  aes(colour = as.factor(steroids)) +
-  facet_wrap(~as.factor(steroids)) +
-  xlab("PaO2")+
-  ylab("Daily Fluid balance (ml)") +
-  ggtitle("PaO2, Steroids and Fluid Balance") +
-  ylim(-5025,5025)+
-  xlim(0,70) +
-  theme_light() +
-  theme(legend.position = "none")
+```{r}
+ggplot(df) +
+  geom_density(aes(na)) +
+  facet_wrap(~ sex)
 ```
 
-# Chloropleth
+And we can split things up further, now using both sex and mortality:
 
-To show you how versatile ggplot2 is, we want to show you a plot that would be impossible in excel or most other software that clinicians commonly use. Here we can make a map of the UK, and highlight patient post codes (fakes!) in 7 lines of code!
-
-There are multiple sources of data we need to use. So we need to build the layers up in parallel.
-
-```{r, eval=F}
-ggplot() +
-  geom_polygon(
-    data = UK,
-    mapping = aes(x = long, y = lat, group = group),
-    fill = "#004529", alpha = 0.75) +
-  geom_point(
-    data = postcodes, 
-    mapping = aes(y =  latitude, x = longitude, group = group),
-    colour = "#f7fcb9", size = 0.5) +
-  coord_map() +
-  theme_minimal() +
-  theme(axis.text = element_blank(),
-        axis.title = element_blank())
+```{r}
+ggplot(df) +
+  geom_histogram(aes(lactate_1hr)) +
+  facet_grid(sex ~ vital_status)
 ```
 
-Notice how this time we are calling `aes` and `data` within the geom itself. This is perfectly acceptable, and makes the code easier to read when using multiple data sources. Also note how there are aesthetic mappings outside `aes`. This is useful when you don't want to apply data to a mapping, but rather overwrite a mapping with a single value that isn't related to the data. Here we are using colour for example, and setting it to the same value for everything within that geom.
+We chain together commands to plot histograms for all the continuous variables in a tibble:
+
+```{r}
+df %>%
+  keep(is.numeric) %>%
+  gather() %>% 
+  ggplot() +
+  geom_histogram(aes(value)) +
+  facet_wrap(~ key, scales = 'free')
+```
+
+And do the same for bar plots of discrete variables:
+
+```{r}
+df %>% 
+  keep(is.factor) %>% 
+  gather() %>% 
+  ggplot() +
+  geom_bar(aes(value)) +
+  coord_flip() +  # change to horizontal bars
+  facet_wrap(~ key, scale s= 'free')
+```
+
+
+
+# Dealing with overplotting and scaling issues
+
+Consider this graph:
+
+```{r}
+g <- ggplot(df, aes(crp, neutrophil)) + theme_minimal()
+g + geom_point()  # overplotted
+```
+
+It's difficult to see exactly what is going on in the bottom-left corner of the plot, where the bulk of the points lie, because many opaque points are plotted on top of one another. We can try and fix this in a few ways:
+
+```{r}
+g + geom_point(alpha=0.1)  # make the points transparent
+g + geom_bin2d()  # turn the points into a heatmap instead
+```
+
+But the bulk of the data are still clumped in the corner. Let's try to help the situation by altering the axes.
+
+We could just clip the axes:
+
+```{r}
+neut_crp_scatter <- g + geom_point(alpha=0.3)
+neut_crp_scatter + ylim(0, 30) + xlim(0, 400)
+```
+
+But some data are then obscured. What about log transforming the axes?
+
+```{r}
+# Turn off minor gridlines, which would otherwise be confusing
+neut_crp_scatter <- neut_crp_scatter
+  + theme(panel.grid.minor = element_blank())
+
+neut_crp_scatter + scale_x_continuous(trans='log2',
+                                      breaks=scales::pretty_breaks(10))
+```
+
+The log transform is a little extreme here. Now the bulk of the data are on the right side of the plot. Let's try a square root transform instead:
+
+```{r}
+neut_crp_scatter + 
+  scale_x_continuous(trans='sqrt', breaks=scales::pretty_breaks(20)) + 
+  scale_y_continuous(trans='sqrt', breaks=scales::pretty_breaks(20))
+```
