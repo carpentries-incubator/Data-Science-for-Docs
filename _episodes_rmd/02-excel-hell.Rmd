@@ -37,7 +37,10 @@ You need to have installed either:
 
 <a name="introduction"></a>
 
-The accompanying slides for this lesson are available [here](/assets/teaching_materials/slides/02-slides-excel-hell.html). You might also enjoy checking out _[janitor](http://sfirke.github.io/janitor/)_: a nice R library that tries to fix automatically what we teach below.
+The accompanying slides for this lesson are available [here](/assets/teaching_materials/slides/02-slides-excel-hell.html). 
+
+You might also enjoy checking out _[janitor](http://sfirke.github.io/janitor/)_: a nice R library that tries to fix automatically what we teach below. Or consider trying [OpenRefine](http://openrefine.org) which even has an supporting [data carpentry lesson](https://datacarpentry.org/OpenRefine-ecology-lesson/00-getting-started/).
+
 
 ## Introduction
 
