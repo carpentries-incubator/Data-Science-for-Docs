@@ -1,16 +1,14 @@
 ---
 source: Rmd
 title: "Introduction to ggplot2"
-teaching: 30
-exercises: 0
+teaching: 60
+exercises: 20
 questions:
-- "---?"
+- "What is ggplot?"
 objectives:
-- "---?"
-- "---?"
+- "Explore effective presentation of course data with ggplot"
 keypoints:
-- "---?"
-- "---?"
+- "ggplot is a powerful library for plotting in R"
 ---
 
 ```{r setup, include=FALSE}
@@ -223,7 +221,7 @@ df %>%
   ggplot() +
   geom_bar(aes(value)) +
   coord_flip() +  # change to horizontal bars
-  facet_wrap(~ key, scale s= 'free')
+  facet_wrap(~ key, scales= 'free')
 ```
 
 
